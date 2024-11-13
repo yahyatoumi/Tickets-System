@@ -10,11 +10,11 @@ class Ticket extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 
-        'description', 
-        'status', 
-        'submitter_id', 
-        'assigned_tech_id'
+        'title',
+        'description',
+        'status',
+        'assigned_tech_id',
+        "submitter_id"
     ];
 
     public function submitter()
@@ -26,5 +26,7 @@ class Ticket extends Model
     {
         return $this->belongsTo(User::class, 'assigned_tech_id');
     }
+
+
     //
 }

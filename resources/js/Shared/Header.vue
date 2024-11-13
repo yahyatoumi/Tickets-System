@@ -78,8 +78,6 @@ export default {
             return this.$page.props.auth
         }
     },
-    mounted() {
-        console.log("usershh", this.users)
-    }
+    
 }
 </script>

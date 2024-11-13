@@ -14,27 +14,40 @@
                         label="Title *" />
                     <textarea-input v-model="form.description" :error="form.errors.description"
                         class="pb-8 pr-6 w-full lg:w-1/2" label="description" />
-                    <div class="flex flex-col w-full pb-8">
-                        <div v-if="auth.user.role !== 'end_user'">
-                            Submitter id:
-                            <span class="ml-2">{{ submitter_id }}</span>
+                    <select-input v-if="auth.user.role !== 'end_user'" v-model="form.status" :error="form.errors.status"
+                        class="pb-8 pr-6 w-full lg:w-1/2" label="Status">
+                        <option value="pending">Pending</option>
+                        <option value="in_progress">In progress</option>
+                        <option value="resolved">Resolved</option>
+                    </select-input>
+                    <div v-if="auth.user.role !== 'end_user'" class="flex flex-col w-full pb-8">
+                        <div>
+                            Submitter:
+                            <span class="ml-2">{{ submitter.username }}</span>
                         </div>
-                        <div v-if="auth.user.role !== 'end_user'" class="mt-4">
-                            Tech id:
-                            <span class="ml-2">{{ assigned_tech_id }}</span>
+                        <div class="mt-4">
+                            Tech:
+                            <span class="ml-2 text-blue-500">{{ assigned_tech?.username || "Not set" }}</span>
 
                             <span @click="showEdit = true"
                                 class="ml-2 underline hover:text-blue-500 text-xs cursor-pointer">edit</span>
                         </div>
-                        <search-input v-if="showEdit" v-model="searchForm.value" class="mr-4 w-full max-w-md mt-4"
-                            @reset="reset" />
+                        <search-input @selectUser="handleSelectUser" v-if="showEdit" v-model="searchForm.value"
+                            :users="users?.data || []" :new_assigned_tech="new_assigned_tech"
+                            class="mr-4 w-full max-w-md mt-4" @reset="reset" />
+                        <div v-if="new_assigned_tech" class="text-xs">
+                            Click update to assign it to:
+                            <span class="text-green-500 text-base">
+                                {{ new_assigned_tech.username }}
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div class="flex items-center px-8 py-4 bg-gray-50 border-t border-gray-100">
                     <button class="text-red-600 hover:underline" tabindex="-1" type="button" @click="destroy">Delete
-                        user</button>
+                        ticket</button>
                     <loading-button :loading="form.processing" class="btn-indigo ml-auto" type="submit">Update
-                        user</loading-button>
+                        ticket</loading-button>
                 </div>
             </form>
         </div>
@@ -51,6 +64,7 @@ import TrashedMessage from '@/Shared/TrashedMessage.vue'
 import TextareaInput from '@/Shared/UI/TextareaInput.vue'
 import SearchInput from '@/Shared/UI/SearchInput.vue'
 import { throttle } from 'lodash'
+import axios from 'axios'
 
 
 
@@ -76,31 +90,58 @@ export default {
             form: this.$inertia.form({
                 title: this.ticket.title,
                 description: this.ticket.description,
+                status: this.ticket.status,
+                assigned_tech_id: this.ticket.assigned_tech?.id || null,
             }),
-            submitter_id: this.ticket.submitter_id,
-            assigned_tech_id: this.ticket.assigned_tech_id || "Not set",
+            submitter: this.ticket.submitter,
+            assigned_tech: this.ticket.assigned_tech || "Not set",
             showEdit: false,
             searchForm: {
                 value: ''
-            }
+            },
+            users: { data: [] },
+            new_assigned_tech: null,
         }
     },
     watch: {
         searchForm: {
             deep: true,
-            handler: throttle(function () {
-                this.$inertia.get(`/users/search?query=${this.searchForm.value}`, { preserveState: true })
+            handler: throttle(async function () {
+                try {
+                    if (this.searchForm?.value?.trim().length) {
+
+                        const response = await axios.get(`/users/search?query=${this.searchForm.value}`)
+                        console.log('search results', response.data)
+
+                        this.users = response.data.users // Set the response data to users
+                    }
+                } catch (error) {
+                    console.error('Error fetching search results', error)
+                }
             }, 150),
         },
     },
     methods: {
         update() {
-            this.form.put(`/users/${this.ticket.id}`)
+            if (this.auth.user.role === "end_user") {
+                console.log("will delete", this.form)
+                delete this.form.status;
+                delete this.form.assigned_tech_id;
+            } else if (this.auth.user === "admin") {
+                this.form.assigned_tech_id = this.new_assigned_tech?.id || this.form.assigned_tech_id
+            }
+            console.log("will submittt", this.form)
+            this.form.put(`/ticket/${this.ticket.id}`)
         },
         destroy() {
             if (confirm('Are you sure you want to delete this user?')) {
-                this.$inertia.delete(`/users/${this.ticket.id}`)
+                this.$inertia.delete(`/ticket/${this.ticket.id}`)
             }
+        },
+        handleSelectUser(newTech) {
+            this.new_assigned_tech = newTech;
+            this.showEdit = false;
+            console.log('Received new new_assigned_tech_id:', newTech);
         },
     },
 }

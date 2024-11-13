@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -113,7 +114,7 @@ class UsersController extends Controller
         return redirect()->route('users.index')->with('success', 'User deleted successfully.');
     }
 
-    public function search(Request $request)
+    public function search(Request $request, Ticket $ticket)
     {
         // Get search query from request
         $query = $request->input('query');
@@ -125,9 +126,12 @@ class UsersController extends Controller
             ->paginate(6);
 
         // Return matching users as a response
-        return Inertia::render('Tickets/FromYou/{ticket}/edit', [
-            'data' => $users,
+        return response()->json([
+            'users' => $users,
         ]);
+        // return Inertia::render("Tickets/FromYou/{ticket}/edit", [
+        //     'users' => $users,
+        // ]);
     }
     //
 }

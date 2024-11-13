@@ -97,4 +97,30 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->role === "end_user";
     }
+
+    public function canChange(Ticket $ticket, string $field): bool
+    {
+        if ($field === "description" || $field === "title") {
+            abort_unless($this->id === $ticket->submitter_id, 403, 'Unauthorized action.');
+            return true;
+        }
+
+        if ($field === "status") {
+            abort_unless($this->isAdmin() || $this->isSupervisor(), 403, 'Unauthorized action.');
+            return $this->isAdmin() || $this->isSupervisor();
+        }
+
+        if ($field === "assigned_tech_id") {
+            abort_unless($this->isAdmin(), 403, 'Unauthorized action.');
+            return true;
+        }
+
+        return $this->isAdmin();
+    }
+
+    public function canDeleteTicket(Ticket $ticket)
+    {
+        abort_unless($this->isAdmin() || $this->id === $ticket->submitter_id, 403, 'Unauthorized action.');
+        return true;
+    }
 }

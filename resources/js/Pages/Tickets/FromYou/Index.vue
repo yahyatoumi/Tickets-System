@@ -1,9 +1,11 @@
 <template>
     <div>
+
         <Head title="Tickets - From You" />
         <h1 class="mb-8 text-3xl font-bold">Tickets</h1>
         <div class="flex items-center justify-between mb-6">
-            <Link class="bg-indigo-800 px-6 py-3 font-bold text-xs rounded ml-auto text-white" href="/tickets/fromyou/create">
+            <Link class="bg-indigo-800 px-6 py-3 font-bold text-xs rounded ml-auto text-white"
+                href="/tickets/fromyou/create">
             <span>Create</span>
             <span class="hidden md:inline">&nbsp;new ticket</span>
             </Link>
@@ -14,12 +16,13 @@
                     <tr class="text-left font-bold">
                         <th class="pb-4 pt-6 px-6">Title</th>
                         <th class="pb-4 pt-6 px-6">Description</th>
-                        <th class="pb-4 pt-6 px-6" colspan="2">Assigned to</th>
+                        <th v-if="auth.user.role !== 'end_user'" class="pb-4 pt-6 px-6" colspan="2">Tech id</th>
+                        <th v-if="auth.user.role === 'end_user'" class="pb-4 pt-6 px-6" colspan="2">status</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="ticket in tickets.data" :key="ticket.id"
-                        class="hover:bg-gray-100 focus-within:bg-gray-100 cursor-pointer"
+                        v-bind:class="getClass(ticket.status)"
                         @click="navigateToEdit(ticket.id)">
                         <td class="border-t">
                             <span class="flex items-center px-6 py-4 focus:text-indigo-500">
@@ -31,12 +34,17 @@
                                 {{ ticket.description }}
                             </span>
                         </td>
-                        <td class="border-t">
+                        <td v-if="auth.user.role !== 'end_user'" class="border-t">
                             <span class="flex items-center px-6 py-4">
                                 {{ ticket.assigned_tech_id || "Not set" }}
                             </span>
                         </td>
-                        <td  class="w-px border-t">
+                        <td v-if="auth.user.role === 'end_user'" class="border-t">
+                            <span class="flex items-center px-6 py-4">
+                                {{ ticket.status }}
+                            </span>
+                        </td>
+                        <td class="w-px border-t">
                             <v-icon name="md-expandmore" class="w-6 h-6 fill-gray-400 -rotate-90" />
                         </td>
                     </tr>
@@ -98,6 +106,14 @@ export default {
             console.log(`/tickets/fromyou/${ticketId}/edit`)
             this.$inertia.visit(`/tickets/fromyou/${ticketId}/edit`);
         },
+        getClass(status) {
+            const colors = {
+                "pending": "border-red-500",
+                "in_progress": "border-green-500",
+                "resolved": "border-blue-500",
+            }
+            return `hover:bg-gray-100 focus-within:bg-gray-100 cursor-pointer border-l-4 ${colors[status]}`
+        }
     },
 
 }

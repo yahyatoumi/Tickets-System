@@ -11,7 +11,6 @@
           <text-input v-model="form.username" :error="form.errors.username" class="pb-8 pr-6 w-full lg:w-1/2" label="Username" />
           <text-input v-model="form.email" :error="form.errors.email" class="pb-8 pr-6 w-full lg:w-1/2" label="Email" />
           <select-input v-model="form.role" :error="form.errors.role" class="pb-8 pr-6 w-full lg:w-1/2" label="Role">
-            <option :value="null" />
             <option value="admin">Admin</option>
             <option value="supervisor">Supervisor</option>
             <option value="end_user">End user</option>
