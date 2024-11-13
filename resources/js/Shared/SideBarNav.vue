@@ -7,13 +7,13 @@
     </div>
     <div class="mb-4">
       <Link class="group flex items-center gap-2 py-3" href="/tickets/fromyou">
-      <div :class="isUrl('/tickets/fromyou') ? 'text-white' : 'text-indigo-300 group-hover:text-white'">From you</div>
+      <div :class="isUrl('/tickets/fromyou') ? 'text-white' : 'text-indigo-300 group-hover:text-white'">{{ !isEndUser(auth) ? "From you" : "Tickets" }}</div>
       <v-icon name="io-ticket" class="fill-gray-400 group-hover:fill-white" />
       </Link>
     </div>
-    <div class="mb-4">
+    <div v-if="!isEndUser(auth)" class="mb-4">
       <Link class="group flex items-center gap-2 py-3" href="/tickets/toyou">
-      <div :class="isUrl('/tickets/fromyou') ? 'text-white' : 'text-indigo-300 group-hover:text-white'">To you</div>
+      <div :class="isUrl('/tickets/toyou') ? 'text-white' : 'text-indigo-300 group-hover:text-white'">To you</div>
       <v-icon name="io-ticket" class="fill-gray-400 group-hover:fill-white" />
       </Link>
     </div>
@@ -27,11 +27,16 @@
 
 <script>
 import { Link } from '@inertiajs/vue3'
-//   import Icon from '@/Shared/Icon.vue'
+import { isEndUser } from '@/helpers/rolesHelpers';
 
 export default {
   components: {
     Link,
+  },
+  computed: {
+    auth() {
+      return this.$page.props.auth
+    }
   },
   methods: {
     isUrl(...urls) {
@@ -41,6 +46,7 @@ export default {
       }
       return urls.filter((url) => currentUrl.startsWith(url)).length
     },
+    isEndUser
   },
 }
 </script>

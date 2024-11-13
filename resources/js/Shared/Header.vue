@@ -25,7 +25,7 @@
                     <div class="mt-2 py-2 text-sm bg-white rounded shadow-xl">
                         <Link class="block px-6 py-2 hover:text-white hover:bg-indigo-500" href="/users">Manage Users
                         </Link>
-                        <Link v-if="auth.user.role !== 'end_user'"
+                        <Link v-if="!isEndUser(auth)"
                             class="group px-6 py-2 hover:text-white hover:bg-indigo-500 flex items-center gap-2"
                             href="/users">
                         <span>
@@ -33,7 +33,7 @@
                         </span>
                         <v-icon name="io-ticket" class="fill-gray-400 group-hover:fill-white" />
                         </Link>
-                        <Link v-if="auth.user.role !== 'end_user'"
+                        <Link v-if="!isEndUser(auth)"
                             class="group px-6 py-2 hover:text-white hover:bg-indigo-500 flex items-center gap-2"
                             href="/users">
                         <span>
@@ -41,7 +41,7 @@
                         </span>
                         <v-icon name="io-ticket" class="fill-gray-400 group-hover:fill-white" />
                         </Link>
-                        <Link v-if="auth.user.role === 'end_user'"
+                        <Link v-if="isEndUser(auth)"
                             class="group px-6 py-2 hover:text-white hover:bg-indigo-500 flex items-center gap-2"
                             href="/users">
                         <span>
@@ -68,6 +68,7 @@
 
 <script>
 import Dropdown from '@/Shared/Dropdown.vue'
+import { isEndUser } from '@/helpers/rolesHelpers';
 
 export default {
     components: {
@@ -78,6 +79,9 @@ export default {
             return this.$page.props.auth
         }
     },
+    methods:{
+        isEndUser
+    }
     
 }
 </script>

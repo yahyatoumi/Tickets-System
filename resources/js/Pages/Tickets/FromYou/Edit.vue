@@ -14,13 +14,13 @@
                         label="Title *" />
                     <textarea-input v-model="form.description" :error="form.errors.description"
                         class="pb-8 pr-6 w-full lg:w-1/2" label="description" />
-                    <select-input v-if="auth.user.role !== 'end_user'" v-model="form.status" :error="form.errors.status"
+                    <select-input v-if="!isEndUser(auth)" v-model="form.status" :error="form.errors.status"
                         class="pb-8 pr-6 w-full lg:w-1/2" label="Status">
                         <option value="pending">Pending</option>
                         <option value="in_progress">In progress</option>
                         <option value="resolved">Resolved</option>
                     </select-input>
-                    <div v-if="auth.user.role !== 'end_user'" class="flex flex-col w-full pb-8">
+                    <div v-if="!isEndUser(auth)" class="flex flex-col w-full pb-8">
                         <div>
                             Submitter:
                             <span class="ml-2">{{ submitter.username }}</span>
@@ -65,6 +65,7 @@ import TextareaInput from '@/Shared/UI/TextareaInput.vue'
 import SearchInput from '@/Shared/UI/SearchInput.vue'
 import { throttle } from 'lodash'
 import axios from 'axios'
+import { isAdmin, isEndUser } from '@/helpers/rolesHelpers'
 
 
 
@@ -123,11 +124,14 @@ export default {
     },
     methods: {
         update() {
-            if (this.auth.user.role === "end_user") {
+            console.log("will submittt", this.form, this.new_assigned_tech)
+            console.log("will submittt", this.new_assigned_tech)
+            if (isEndUser(this.auth)) {
                 console.log("will delete", this.form)
                 delete this.form.status;
                 delete this.form.assigned_tech_id;
-            } else if (this.auth.user === "admin") {
+            } else if (isAdmin(this.auth)) {
+                console.log("adedddd")
                 this.form.assigned_tech_id = this.new_assigned_tech?.id || this.form.assigned_tech_id
             }
             console.log("will submittt", this.form)
@@ -143,6 +147,8 @@ export default {
             this.showEdit = false;
             console.log('Received new new_assigned_tech_id:', newTech);
         },
+        isAdmin,
+        isEndUser,
     },
 }
 </script>

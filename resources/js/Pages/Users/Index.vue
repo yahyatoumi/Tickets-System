@@ -1,9 +1,8 @@
 <template>
     <div>
-
         <Head title="users" />
         <h1 class="mb-8 text-3xl font-bold">Users</h1>
-        <div v-if="auth.user.role === 'admin'" class="flex items-center justify-between mb-6">
+        <div v-if="isAdmin(auth)" class="flex items-center justify-between mb-6">
             <Link class="bg-indigo-800 px-6 py-3 font-bold text-xs rounded ml-auto text-white" href="/users/create">
             <span>Create</span>
             <span class="hidden md:inline">&nbsp;new user</span>
@@ -38,7 +37,7 @@
                                 {{ user.role }}
                             </span>
                         </td>
-                        <td v-if="auth.user.role === 'admin'" class="w-px border-t">
+                        <td v-if="isAdmin(auth)" class="w-px border-t">
                             <v-icon name="md-expandmore" class="w-6 h-6 fill-gray-400 -rotate-90" />
                         </td>
                     </tr>
@@ -54,53 +53,28 @@
 
 <script>
 import { Head, Link } from '@inertiajs/vue3'
-import CustomButton from '@/Shared/UI/Button.vue'
-//   import pickBy from 'lodash/pickBy'
 import Layout from '@/Layouts/Layout.vue'
-//   import throttle from 'lodash/throttle'
-//   import mapValues from 'lodash/mapValues'
 import Pagination from '@/Shared/Pagination.vue'
-//   import SearchFilter from '@/Shared/SearchFilter.vue'
+import { isAdmin } from '@/helpers/rolesHelpers';
+
 
 export default {
     components: {
         Head,
-        //   Icon,
         Link,
         Pagination,
-        //   SearchFilter,
     },
     layout: Layout,
     props: {
-        // filters: Object,
         users: Object,
         auth: Object
     },
-    data() {
-        return {
-            form: {
-                // search: this.filters.search,
-                // trashed: this.filters.trashed,
-            },
-        }
-    },
-    watch: {
-        //   form: {
-        //     deep: true,
-        //     handler: throttle(function () {
-        //       this.$inertia.get('/users', pickBy(this.form), { preserveState: true })
-        //     }, 150),
-        //   },
-    },
     methods: {
-        //   reset() {
-        //     this.form = mapValues(this.form, () => null)
-        //   },
         navigateToEdit(userId) {
-            // Navigate to the user's edit page
-            if (this.auth.user.role === 'admin')
+            if (isAdmin(this.auth))
                 this.$inertia.visit(`/users/${userId}/edit`);
         },
+        isAdmin,
     },
 
 }
