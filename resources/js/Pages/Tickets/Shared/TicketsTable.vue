@@ -4,7 +4,7 @@
             <tr class="text-left font-bold">
                 <th class="pb-4 pt-6 px-6">Title</th>
                 <th class="pb-4 pt-6 px-6">Description</th>
-                <th v-if="isEndUser(auth)" class="pb-4 pt-6 px-6" colspan="2">Tech id</th>
+                <th v-if="!isEndUser(auth)" class="pb-4 pt-6 px-6" colspan="2">Tech id</th>
                 <th v-if="isEndUser(auth)" class="pb-4 pt-6 px-6" colspan="2">status</th>
             </tr>
         </thead>

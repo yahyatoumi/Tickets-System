@@ -42,19 +42,12 @@
                         </span>
                         <v-icon name="io-ticket" class="fill-gray-400 group-hover:fill-white" />
                         </Link>
-                        <Link v-if="!isEndUser(auth)"
+                        <Link
                             class="group px-6 py-2 hover:text-white hover:bg-indigo-500 flex items-center gap-2"
                             href="/users">
                         <span>
-                            To you
-                        </span>
-                        <v-icon name="io-ticket" class="fill-gray-400 group-hover:fill-white" />
-                        </Link>
-                        <Link v-if="isEndUser(auth)"
-                            class="group px-6 py-2 hover:text-white hover:bg-indigo-500 flex items-center gap-2"
-                            href="/users">
-                        <span>
-                            Tickets
+                            {{ isEndUser(auth) ? "Tickets"  : "To you"}}
+                            
                         </span>
                         <v-icon name="io-ticket" class="fill-gray-400 group-hover:fill-white" />
                         </Link>

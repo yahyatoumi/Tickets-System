@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Storage;
 
 
 class UsersController extends Controller
@@ -20,6 +21,7 @@ class UsersController extends Controller
     public function index(): Response
     {
         $users = User::orderBy('created_at', 'desc')->paginate(10);
+        Storage::disk('local')->put('example.txt', 'Contents');
 
         return Inertia::render('Users/Index', [
             'users' => $users,
