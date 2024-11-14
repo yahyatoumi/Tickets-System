@@ -118,9 +118,28 @@ class User extends Authenticatable implements JWTSubject
         return $this->isAdmin();
     }
 
+    public function canSee(Ticket $ticket, string $field): bool
+    {
+        if ($field === "assigned_tech_id") {
+            return !$this->isEndUser();
+        }
+        if ($field === "submitter") {
+            return !$this->isEndUser();
+        }
+
+        return $this->isAdmin();
+    }
+
     public function canDeleteTicket(Ticket $ticket)
     {
         abort_unless($this->isAdmin() || $this->id === $ticket->submitter_id, 403, 'Unauthorized action.');
         return true;
+    }
+
+    public function canEditTicket(Ticket $ticket)
+    {
+        $can_edit = $this->isAdmin() || $this->id === $ticket->submitter_id || $this->id === $ticket->assigned_tech_id;
+
+        return $can_edit;
     }
 }

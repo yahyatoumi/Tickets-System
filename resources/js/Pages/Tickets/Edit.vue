@@ -10,31 +10,33 @@
         <div class="max-w-3xl bg-white rounded-md shadow overflow-hidden">
             <form @submit.prevent="update">
                 <div class="flex flex-wrap -mb-8 -mr-6 p-8">
-                    <text-input v-model="form.title" :error="form.errors.title" class="pb-8 pr-6 w-full lg:w-1/2"
+                    <text-input :readonly="!canEditFieldOfTicket(auth, 'title', submitter.id)" v-model="form.title" :error="form.errors.title" class="pb-8 pr-6 w-full lg:w-1/2"
                         label="Title *" />
-                    <textarea-input v-model="form.description" :error="form.errors.description"
+                    <textarea-input :readonly="!canEditFieldOfTicket(auth, 'description', submitter.id)" v-model="form.description" :error="form.errors.description"
                         class="pb-8 pr-6 w-full lg:w-1/2" label="description" />
-                    <select-input v-if="!isEndUser(auth)" v-model="form.status" :error="form.errors.status"
+                    <select-input :disabled="!canEditFieldOfTicket(auth, 'status', submitter.id)" v-model="form.status" :error="form.errors.status"
                         class="pb-8 pr-6 w-full lg:w-1/2" label="Status">
                         <option value="pending">Pending</option>
                         <option value="in_progress">In progress</option>
                         <option value="resolved">Resolved</option>
                     </select-input>
-                    <div v-if="!isEndUser(auth)" class="flex flex-col w-full pb-8">
+                    <div v-if="canSeeFieldOfTicket(auth, 'submitter')" class="flex flex-col w-full pb-8">
                         <div>
                             Submitter:
                             <span class="ml-2">{{ submitter.username }}</span>
                         </div>
-                        <div class="mt-4">
-                            Tech:
-                            <span class="ml-2 text-blue-500">{{ assigned_tech?.username || "Not set" }}</span>
+                        <div v-if="isAdmin(auth)">
+                            <div class="mt-4">
+                                Tech:
+                                <span class="ml-2 text-blue-500">{{ assigned_tech?.username || "Not set" }}</span>
 
-                            <span @click="showEdit = true"
-                                class="ml-2 underline hover:text-blue-500 text-xs cursor-pointer">edit</span>
+                                <span @click="showEdit = true"
+                                    class="ml-2 underline hover:text-blue-500 text-xs cursor-pointer">edit</span>
+                            </div>
+                            <search-input @selectUser="handleSelectUser" v-if="showEdit" v-model="searchForm.value"
+                                :users="users?.data || []" :new_assigned_tech="new_assigned_tech"
+                                class="mr-4 w-full max-w-md mt-4" @reset="reset" />
                         </div>
-                        <search-input @selectUser="handleSelectUser" v-if="showEdit" v-model="searchForm.value"
-                            :users="users?.data || []" :new_assigned_tech="new_assigned_tech"
-                            class="mr-4 w-full max-w-md mt-4" @reset="reset" />
                         <div v-if="new_assigned_tech" class="text-xs">
                             Click update to assign it to:
                             <span class="text-green-500 text-base">
@@ -65,7 +67,8 @@ import TextareaInput from '@/Shared/UI/TextareaInput.vue'
 import SearchInput from '@/Shared/UI/SearchInput.vue'
 import { throttle } from 'lodash'
 import axios from 'axios'
-import { isAdmin, isEndUser } from '@/helpers/rolesHelpers'
+import { isAdmin, isEndUser, canSeeFieldOfTicket, canEditFieldOfTicket } from '@/helpers/rolesHelpers'
+import { isSupervisor } from '../../helpers/rolesHelpers'
 
 
 
@@ -124,17 +127,20 @@ export default {
     },
     methods: {
         update() {
-            console.log("will submittt", this.form, this.new_assigned_tech)
-            console.log("will submittt", this.new_assigned_tech)
             if (isEndUser(this.auth)) {
-                console.log("will delete", this.form)
                 delete this.form.status;
                 delete this.form.assigned_tech_id;
-            } else if (isAdmin(this.auth)) {
-                console.log("adedddd")
+            }
+            else if (isAdmin(this.auth)) {
+                !canEditFieldOfTicket(this.auth, "title", this.submitter.id) && delete this.form.title;
+                !canEditFieldOfTicket(this.auth, "description", this.submitter.id) && delete this.form.description;
                 this.form.assigned_tech_id = this.new_assigned_tech?.id || this.form.assigned_tech_id
             }
-            console.log("will submittt", this.form)
+            else if (isSupervisor(this.auth)) {
+                delete this.form.title;
+                delete this.form.description;
+                delete this.form.assigned_tech_id;
+            }
             this.form.put(`/ticket/${this.ticket.id}`)
         },
         destroy() {
@@ -149,6 +155,8 @@ export default {
         },
         isAdmin,
         isEndUser,
+        canSeeFieldOfTicket,
+        canEditFieldOfTicket
     },
 }
 </script>

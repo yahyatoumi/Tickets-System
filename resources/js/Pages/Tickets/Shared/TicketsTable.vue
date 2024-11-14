@@ -4,8 +4,9 @@
             <tr class="text-left font-bold">
                 <th class="pb-4 pt-6 px-6">Title</th>
                 <th class="pb-4 pt-6 px-6">Description</th>
-                <th v-if="!isEndUser(auth)" class="pb-4 pt-6 px-6" colspan="2">Tech id</th>
-                <th v-if="isEndUser(auth)" class="pb-4 pt-6 px-6" colspan="2">status</th>
+                <th class="pb-4 pt-6 px-6" colspan="2">
+                    {{ canSeeFieldOfTicket(auth, "tech") ? 'Tech ID' : 'Status' }}
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -21,14 +22,9 @@
                         {{ ticket.description }}
                     </span>
                 </td>
-                <td v-if="!isEndUser(auth)" class="border-t">
+                <td class="border-t">
                     <span class="flex items-center px-6 py-4">
-                        {{ ticket.assigned_tech_id || "Not set" }}
-                    </span>
-                </td>
-                <td v-if="isEndUser(auth)" class="border-t">
-                    <span class="flex items-center px-6 py-4">
-                        {{ ticket.status }}
+                        {{ canSeeFieldOfTicket(auth, "tech") ? (ticket.assigned_tech_id || "Not set") : ticket.status }}
                     </span>
                 </td>
                 <td class="w-px border-t">
@@ -44,7 +40,7 @@
 
 <script>
 import { Head, Link } from '@inertiajs/vue3'
-import { isEndUser } from '@/helpers/rolesHelpers';
+import { isAdmin, isEndUser, canSeeFieldOfTicket, canEditFieldOfTicket } from '@/helpers/rolesHelpers'
 
 export default {
     components: {
@@ -61,8 +57,8 @@ export default {
     },
     methods: {
         navigateToEdit(ticketId) {
-            console.log(`/tickets/fromyou/${ticketId}/edit`)
-            this.$inertia.visit(`/tickets/fromyou/${ticketId}/edit`);
+            console.log(`/tickets/${ticketId}/edit`)
+            this.$inertia.visit(`/tickets/${ticketId}/edit`);
         },
         getClass(status) {
             const colors = {
@@ -73,7 +69,8 @@ export default {
             return `hover:bg-gray-100 focus-within:bg-gray-100 cursor-pointer border-l-4 ${colors[status]}`
         },
         isEndUser,
-
+        canSeeFieldOfTicket,
+        canEditFieldOfTicket
     },
 
 }

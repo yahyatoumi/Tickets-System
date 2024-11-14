@@ -104,13 +104,20 @@ class TicketController extends Controller
         return Redirect::route('tickets.fromyou.index')->with('success', 'User created.');
     }
 
-    public function fromyou_edit(Request $request, Ticket $ticket): Response
+    public function edit(Request $request, Ticket $ticket): Response
     {
         // Retrieve the JWT token from the cookie
         $token = $request->cookie('jwt_token');
 
         // Get the authenticated user from the token
         $user = JWTAuth::toUser($token);
+
+        // Check access to edit the ticket
+
+        if (!$user->canEditTicket($ticket)) {
+            session()->flash('error', 'Unauthorized action.');
+            return Inertia::location('/');
+        }
 
         $ticketData = [
             'id' => $ticket->id,
@@ -121,7 +128,7 @@ class TicketController extends Controller
         ];
 
         // Include additional fields if the user is an admin
-        if ($user->role === 'admin') {
+        if (!$user->isEndUser()) {
             $submitter = User::findOrFail($ticket->submitter_id);
             $ticketData['submitter'] = $submitter;
 
@@ -133,7 +140,7 @@ class TicketController extends Controller
             }
         }
 
-        return Inertia::render('Tickets/FromYou/Edit', [
+        return Inertia::render('Tickets/Edit', [
             'ticket' => $ticketData,
         ]);
     }
@@ -151,8 +158,8 @@ class TicketController extends Controller
 
         // Validate the input
         $validator = Validator::make($request->all(), [
-            'title' => 'required|max:50' . $id,
-            'description' => 'required|max:1023' . $id,
+            'title' => 'nullable|min:1|max:50',
+            'description' => 'nullable|min:1|max:1023',
             'assigned_tech_id' => 'nullable|exists:users,id',
             'status' => 'nullable|in:pending,in_progress,resolved',
         ]);
@@ -193,6 +200,9 @@ class TicketController extends Controller
 
         // Get the authenticated user from the token
         $user = JWTAuth::toUser($token);
+
+        // Check if the user can delete the ticket. Error: 403 if they cant
+        $user->canDelete($ticket);
 
         // Delete the ticket
         $ticket->delete();

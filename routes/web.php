@@ -9,6 +9,7 @@ use App\Http\Controllers\UsersController;
 use App\Http\Middleware\JWTMiddleware;
 use App\Http\Middleware\SupervisorAndAdminMiddleware;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\TicketEditAccessMidlleware;
 
 Route::middleware([JWTMiddleware::class])->group(function () {
 
@@ -33,8 +34,6 @@ Route::middleware([JWTMiddleware::class])->group(function () {
 		Route::get('/tickets/toyou', [TicketController::class, 'to_you'])->name('tickets.toyou.index');
 		Route::get('/tickets/toyou/edit', [TicketController::class, 'edit'])->name('tickets.toyou.edit');
 		Route::post('/tickets/toyou/edit', [TicketController::class, 'edit'])->name('tickets.toyou.edit');
-
-		
 	});
 
 	// All users
@@ -56,7 +55,11 @@ Route::middleware([JWTMiddleware::class])->group(function () {
 	Route::get('/tickets/fromyou', [TicketController::class, 'from_you'])->name('tickets.fromyou.index');
 	Route::get('/tickets/fromyou/create', [TicketController::class, 'create'])->name('tickets.fromyou.create');
 	Route::post('/tickets/fromyou/create', [TicketController::class, 'create'])->name('tickets.fromyou.create');
-	Route::get('/tickets/fromyou/{ticket}/edit', [TicketController::class, 'fromyou_edit'])->name('tickets.fromyou.edit');
+
+	Route::middleware([TicketEditAccessMidlleware::class])->group(function () {
+		Route::get('/tickets/{ticket}/edit', [TicketController::class, 'edit'])->name('ticket.edit');
+	});
+
 	Route::put('/ticket/{ticket}', [TicketController::class, 'update'])->name('ticket.update');
 	Route::delete('/ticket/{ticket}', [TicketController::class, 'destroy'])->name('ticket.delete');
 
