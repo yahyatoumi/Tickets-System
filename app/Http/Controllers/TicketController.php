@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewNotification;
 use App\Http\Controllers\Controller;
+use App\Models\Notification;
 use App\Models\Ticket;
+use App\Models\UploadedFile;
 use App\Models\User;
 use Inertia\Response;
 use Inertia\Inertia;
@@ -11,6 +14,7 @@ use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 
 
@@ -32,9 +36,10 @@ class TicketController extends Controller
             ->select('id', 'title', 'status', 'description', 'created_at', 'assigned_tech_id')
             ->paginate(10);
 
-        if (!$user->isAdmin() && !$user->isSupervisor()) {
+        if (!$user->canSee("assigned_tech_id")) {
             $tickets->makeHidden(['assigned_tech_id']);
         }
+
 
         return Inertia::render('Tickets/FromYou/Index', [
             'tickets' => $tickets,
@@ -54,6 +59,8 @@ class TicketController extends Controller
             ->orderBy('created_at', 'desc')
             ->select('id', 'title', 'status', 'description', 'created_at', 'submitter_id')
             ->paginate(10);
+
+            
 
         return Inertia::render('Tickets/ToYou/Index', [
             'tickets' => $tickets,
@@ -81,27 +88,57 @@ class TicketController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|max:50',
             'description' => 'required|max:1023',
+            'files' => 'nullable|array', // Ensure files are an array
+            'files.*' => 'file|mimes:jpg,jpeg,png,pdf,php,html|max:10000', // Allow specific file types 10000 kilobyes | 10 MB max for each file
         ]);
 
+        
         if ($validator->fails()) {
             return back()
-                ->withErrors($validator)
-                ->withInput()
-                ->with('error', 'Failed to create ticket.'); // Keeps the user's input data
+            ->withErrors($validator)
+            ->withInput()
+            ->with('error', 'Failed to create ticket.'); // Keeps the user's input data
         }
 
+        
         // Create the user
-        echo ($user->id);
         $ticket = Ticket::create([
             'title' => $request->title,
             'description' => $request->description,  // You can set the default role or pass it from the frontend
             'submitter_id' => $user->id,
         ]);
-        echo ($user->id);
 
+        $notification = Notification::create([
+            'user_id' => $user->id,
+            'title' => "New ticket",
+            'body' => $ticket
+        ], $user->id);
+
+        Log::info($notification);
+        event(new NewNotification($notification));
+
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                $ticketId = $ticket->id;
+    
+                // Generate a random name for the file
+                $randomName = Str::random(10) . '.' . $file->getClientOriginalExtension(); // Random 10 characters + original extension
+            
+                // Define the path where the file will be stored
+                $filePath = $file->storeAs("uploads/tickets/{$ticketId}", $randomName, 'public');
+            
+                // Create the UploadedFile model instance and store the file details
+                $uploadedFile = new UploadedFile();
+                $uploadedFile->filename = $randomName; // Store the random file name
+                $uploadedFile->original_name = $file->getClientOriginalName(); // Store the original file name
+                $uploadedFile->file_path = $filePath; // Store the file path
+                $uploadedFile->ticket_id = $ticketId; // Associate file with ticket
+                $uploadedFile->save();
+            }
+        }
 
         // You can use a different response or redirect after successful registration
-        return Redirect::route('tickets.fromyou.index')->with('success', 'User created.');
+        return Redirect::route('tickets.fromyou.index')->with('success', 'Ticket created.');
     }
 
     public function edit(Request $request, Ticket $ticket): Response
@@ -125,6 +162,7 @@ class TicketController extends Controller
             'description' => $ticket->description,
             'created_at' => $ticket->created_at,
             'status' => $ticket->status,
+            "files" => $ticket->uploadedFiles,
         ];
 
         // Include additional fields if the user is an admin

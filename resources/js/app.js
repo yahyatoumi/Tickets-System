@@ -4,9 +4,9 @@ import { Ziggy } from './ziggy'; // Adjust path if necessary
 import { route } from 'ziggy-js';
 import { addIcons } from 'oh-vue-icons';
 import { OhVueIcon } from 'oh-vue-icons';
-import { MdExpandmore, FcMenu, IoTicket, BiChatFill } from 'oh-vue-icons/icons';
+import { MdExpandmore, FcMenu, IoTicket, BiChatFill, MdNotificationsSharp } from 'oh-vue-icons/icons';
 
-addIcons(MdExpandmore, FcMenu, IoTicket, BiChatFill);
+addIcons(MdExpandmore, FcMenu, IoTicket, BiChatFill, MdNotificationsSharp);
 
 createInertiaApp({
   resolve: name => {

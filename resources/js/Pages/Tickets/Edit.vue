@@ -44,6 +44,7 @@
                             </span>
                         </div>
                     </div>
+                    <files-in-edit />
                 </div>
                 <div class="flex items-center px-8 py-4 bg-gray-50 border-t border-gray-100">
                     <button class="text-red-600 hover:underline" tabindex="-1" type="button" @click="destroy">Delete
@@ -68,7 +69,9 @@ import SearchInput from '@/Shared/UI/SearchInput.vue'
 import { throttle } from 'lodash'
 import axios from 'axios'
 import { isAdmin, isEndUser, canSeeFieldOfTicket, canEditFieldOfTicket } from '@/helpers/rolesHelpers'
-import { isSupervisor } from '../../helpers/rolesHelpers'
+import { isSupervisor } from '@/helpers/rolesHelpers'
+import FilesInEdit from "./Shared/FilesInEdit.vue"
+
 
 
 
@@ -81,7 +84,8 @@ export default {
         TextInput,
         TrashedMessage,
         TextareaInput,
-        SearchInput
+        SearchInput,
+        FilesInEdit
     },
     layout: Layout,
     props: {

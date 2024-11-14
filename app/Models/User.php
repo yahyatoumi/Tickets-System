@@ -118,7 +118,7 @@ class User extends Authenticatable implements JWTSubject
         return $this->isAdmin();
     }
 
-    public function canSee(Ticket $ticket, string $field): bool
+    public function canSee(string $field): bool
     {
         if ($field === "assigned_tech_id") {
             return !$this->isEndUser();

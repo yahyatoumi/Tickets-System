@@ -27,6 +27,11 @@ class Ticket extends Model
         return $this->belongsTo(User::class, 'assigned_tech_id');
     }
 
+    public function uploadedFiles()
+    {
+        return $this->hasMany(UploadedFile::class);
+    }
+
 
     //
 }

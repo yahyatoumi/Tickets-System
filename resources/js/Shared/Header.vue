@@ -17,52 +17,55 @@
         </div>
         <div class="md:text-md flex items-center justify-between p-4 w-full text-sm bg-white border-b md:px-12 md:py-0">
             <div></div>
-            <dropdown class="mt-1" placement="bottom-end">
-                <template #default>
-                    <div class="group flex items-center cursor-pointer select-none">
-                        <div
-                            class="mr-1 text-gray-700 group-hover:text-indigo-600 focus:text-indigo-600 whitespace-nowrap">
-                            <span>
-                                {{ auth.user.username }}
-                            </span>
-                            <!-- <span class="hidden md:inline">&nbsp;{{ props.auth.user.username }}</span> -->
+            <div class="flex items-center gap-4">
+                <notifications />
+                <dropdown class="mt-1" placement="bottom-end">
+                    <template #default>
+                        <div class="group flex items-center cursor-pointer select-none">
+                            <div
+                                class="mr-1 text-gray-700 group-hover:text-indigo-600 focus:text-indigo-600 whitespace-nowrap">
+                                <span>
+                                    {{ auth.user.username }}
+                                </span>
+                                <!-- <span class="hidden md:inline">&nbsp;{{ props.auth.user.username }}</span> -->
+                            </div>
+                            <v-icon name="md-expandmore" class="" />
                         </div>
-                        <v-icon name="md-expandmore" class="" />
-                    </div>
-                </template>
-                <template #dropdown>
-                    <div class="mt-2 py-2 text-sm bg-white rounded shadow-xl">
-                        <Link class="block px-6 py-2 hover:text-white hover:bg-indigo-500" href="/users">Manage Users
-                        </Link>
-                        <Link v-if="!isEndUser(auth)"
-                            class="group px-6 py-2 hover:text-white hover:bg-indigo-500 flex items-center gap-2"
-                            href="/users">
-                        <span>
-                            From you
-                        </span>
-                        <v-icon name="io-ticket" class="fill-gray-400 group-hover:fill-white" />
-                        </Link>
-                        <Link
-                            class="group px-6 py-2 hover:text-white hover:bg-indigo-500 flex items-center gap-2"
-                            href="/users">
-                        <span>
-                            {{ isEndUser(auth) ? "Tickets"  : "To you"}}
-                            
-                        </span>
-                        <v-icon name="io-ticket" class="fill-gray-400 group-hover:fill-white" />
-                        </Link>
-                        <Link class="group px-6 py-2 hover:text-white hover:bg-indigo-500 flex items-center gap-2"
-                            href="/chat">
-                        <span>
-                            Chat
-                        </span>
-                        <v-icon name="bi-chat-fill" class="fill-gray-400 group-hover:fill-white" />
-                        </Link>
-                        <Link class="block px-6 py-2 w-full text-left hover:text-white hover:bg-indigo-500"
-                            href="/logout" method="delete" as="button">Logout</Link>
-                    </div>
-                </template>
-            </dropdown>
+                    </template>
+                    <template #dropdown>
+                        <div class="mt-2 py-2 text-sm bg-white rounded shadow-xl">
+                            <Link class="block px-6 py-2 hover:text-white hover:bg-indigo-500" href="/users">Manage
+                            Users
+                            </Link>
+                            <Link v-if="!isEndUser(auth)"
+                                class="group px-6 py-2 hover:text-white hover:bg-indigo-500 flex items-center gap-2"
+                                href="/users">
+                            <span>
+                                From you
+                            </span>
+                            <v-icon name="io-ticket" class="fill-gray-400 group-hover:fill-white" />
+                            </Link>
+                            <Link class="group px-6 py-2 hover:text-white hover:bg-indigo-500 flex items-center gap-2"
+                                href="/users">
+                            <span>
+                                {{ isEndUser(auth) ? "Tickets" : "To you" }}
+
+                            </span>
+                            <v-icon name="io-ticket" class="fill-gray-400 group-hover:fill-white" />
+                            </Link>
+                            <Link class="group px-6 py-2 hover:text-white hover:bg-indigo-500 flex items-center gap-2"
+                                href="/chat">
+                            <span>
+                                Chat
+                            </span>
+                            <v-icon name="bi-chat-fill" class="fill-gray-400 group-hover:fill-white" />
+                            </Link>
+                            <Link class="block px-6 py-2 w-full text-left hover:text-white hover:bg-indigo-500"
+                                href="/logout" method="delete" as="button">Logout</Link>
+                        </div>
+                    </template>
+                </dropdown>
+            </div>
         </div>
     </header>
 </template>
@@ -71,11 +74,13 @@
 import Dropdown from '@/Shared/Dropdown.vue'
 import { isEndUser } from '@/helpers/rolesHelpers';
 import SideBarNav from './SideBarNav.vue';
+import Notifications from './Notifications.vue';
 
 export default {
     components: {
         Dropdown,
-        SideBarNav
+        SideBarNav,
+        Notifications
     },
     computed: {
         auth() {
