@@ -6,6 +6,11 @@ import { addIcons } from 'oh-vue-icons';
 import { OhVueIcon } from 'oh-vue-icons';
 import { MdExpandmore, FcMenu, IoTicket, BiChatFill, MdNotificationsSharp } from 'oh-vue-icons/icons';
 
+import Echo from 'laravel-echo';
+ 
+import Pusher from 'pusher-js';
+window.Pusher = Pusher;
+
 addIcons(MdExpandmore, FcMenu, IoTicket, BiChatFill, MdNotificationsSharp);
 
 createInertiaApp({
@@ -14,6 +19,17 @@ createInertiaApp({
     return pages[`./Pages/${name}.vue`]
   },
   setup({ el, App, props, plugin }) {
+
+    window.Echo = new Echo({
+      broadcaster: 'reverb',
+      key: import.meta.env.VITE_REVERB_APP_KEY,
+      wsHost: import.meta.env.VITE_REVERB_HOST,
+      wsPort: import.meta.env.VITE_REVERB_PORT,
+      wssPort: import.meta.env.VITE_REVERB_PORT,
+      forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
+      enabledTransports: ['ws', 'wss'],
+    });
+
     createApp({ render: () => h(App, props) })
       .use(plugin)
       .provide('route', route) // Make Ziggy available globally as 'route'

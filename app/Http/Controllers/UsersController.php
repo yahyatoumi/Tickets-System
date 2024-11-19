@@ -61,7 +61,7 @@ class UsersController extends Controller
         ]);
 
         // You can use a different response or redirect after successful registration
-        return Redirect::route('users.create')->with('success', 'User created.');
+        return Redirect::route('users.create.index')->with('success', 'User created.');
     }
 
     public function edit(User $user): Response

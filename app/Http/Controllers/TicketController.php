@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\NewNotification;
+use App\Events\TicketCreatedEvent;
+use App\Events\TestEvent;
 use App\Http\Controllers\Controller;
 use App\Models\Notification;
 use App\Models\Ticket;
 use App\Models\UploadedFile;
 use App\Models\User;
+use App\Notifications\NewNotification;
 use Inertia\Response;
 use Inertia\Inertia;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
@@ -16,9 +18,6 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
-
-
-
 
 class TicketController extends Controller
 {
@@ -29,6 +28,9 @@ class TicketController extends Controller
 
         // Get the authenticated user from the token
         $user = JWTAuth::toUser($token);
+
+        TicketCreatedEvent::dispatch();
+
 
         // Fetch tickets where submitter_id matches the authenticated user's ID
         $tickets = Ticket::where('submitter_id', $user->id)
@@ -60,7 +62,7 @@ class TicketController extends Controller
             ->select('id', 'title', 'status', 'description', 'created_at', 'submitter_id')
             ->paginate(10);
 
-            
+
 
         return Inertia::render('Tickets/ToYou/Index', [
             'tickets' => $tickets,
@@ -92,15 +94,15 @@ class TicketController extends Controller
             'files.*' => 'file|mimes:jpg,jpeg,png,pdf,php,html|max:10000', // Allow specific file types 10000 kilobyes | 10 MB max for each file
         ]);
 
-        
+
         if ($validator->fails()) {
             return back()
-            ->withErrors($validator)
-            ->withInput()
-            ->with('error', 'Failed to create ticket.'); // Keeps the user's input data
+                ->withErrors($validator)
+                ->withInput()
+                ->with('error', 'Failed to create ticket.'); // Keeps the user's input data
         }
 
-        
+
         // Create the user
         $ticket = Ticket::create([
             'title' => $request->title,
@@ -108,25 +110,27 @@ class TicketController extends Controller
             'submitter_id' => $user->id,
         ]);
 
-        $notification = Notification::create([
-            'user_id' => $user->id,
-            'title' => "New ticket",
-            'body' => $ticket
-        ], $user->id);
+        $ticket->load('submitter');
 
-        Log::info($notification);
-        event(new NewNotification($notification));
+        $admins = User::where('role', 'admin')->get();
+        foreach ($admins as $admin) {
+            if ($admin->id !== $user->id)
+                $admin->notify(new NewNotification($ticket, $user));
+        }
+
+        $ticket->submitter->notify(new NewNotification($ticket, $user));
+
 
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
                 $ticketId = $ticket->id;
-    
+
                 // Generate a random name for the file
                 $randomName = Str::random(10) . '.' . $file->getClientOriginalExtension(); // Random 10 characters + original extension
-            
+
                 // Define the path where the file will be stored
                 $filePath = $file->storeAs("uploads/tickets/{$ticketId}", $randomName, 'public');
-            
+
                 // Create the UploadedFile model instance and store the file details
                 $uploadedFile = new UploadedFile();
                 $uploadedFile->filename = $randomName; // Store the random file name

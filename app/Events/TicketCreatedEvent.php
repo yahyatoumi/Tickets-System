@@ -9,20 +9,17 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
-class NewNotification implements ShouldBroadcast
+class TicketCreatedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $notification;
-    public $userId;
     /**
      * Create a new event instance.
      */
-    public function __construct($notification)
+    public function __construct()
     {
-        $this->notification = $notification;
+        //
     }
 
     /**
@@ -30,10 +27,10 @@ class NewNotification implements ShouldBroadcast
      *
      * @return array<int, \Illuminate\Broadcasting\Channel>
      */
-    public function broadcastOn()
+    public function broadcastOn(): array
     {
-        Log::info("message");
-
-        return new PrivateChannel('notifications.' . $this->userId);
+        return [
+            new PrivateChannel('channel-name'),
+        ];
     }
 }
