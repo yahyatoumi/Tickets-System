@@ -28,6 +28,13 @@ createInertiaApp({
       wssPort: import.meta.env.VITE_REVERB_PORT,
       forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
       enabledTransports: ['ws', 'wss'],
+      authEndpoint: "/api/mybroadcasting/auth",
+      auth: {
+        headers: {
+          // 'Authorization': `Bearer ${jwtToken}`, // Include JWT token in the Authorization header
+          // 'Accept': 'application/json' // Add the Accept header to specify JSON response
+        }
+      }
     });
 
     createApp({ render: () => h(App, props) })

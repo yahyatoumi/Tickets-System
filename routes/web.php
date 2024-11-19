@@ -6,6 +6,7 @@ use App\Http\Controllers\TestController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserNotificationsController;
+use App\Http\Controllers\BroadcastingController;
 use App\Http\Controllers\UsersController;
 use App\Http\Middleware\JWTMiddleware;
 use App\Http\Middleware\SupervisorAndAdminMiddleware;
@@ -13,6 +14,9 @@ use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\TicketEditAccessMidlleware;
 use Illuminate\Broadcasting\BroadcastController;
 use Illuminate\Support\Facades\Broadcast;
+
+// Route::post('/mybroadcasting/auth', [BroadcastingController::class, 'authorize']);
+
 
 Route::middleware([JWTMiddleware::class])->group(function () {
 
