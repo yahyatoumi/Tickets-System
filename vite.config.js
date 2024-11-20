@@ -14,6 +14,7 @@ export default defineConfig({
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.js'],
             refresh: true,
+            // buildDirectory: '/', // This ensures the manifest is generated in the .vite directory
         }),
         // Add this vue plugin configuration here
         vue({
@@ -25,6 +26,10 @@ export default defineConfig({
             },
         })
     ],
+    // build: {
+    //     outDir: 'public/build', // Ensure assets are built in the public directory
+    //     manifest: true,         // Laravel needs this to load assets
+    // },
     resolve: {
         alias: {
             '@': '/resources/js',

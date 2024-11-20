@@ -22,7 +22,7 @@ class UsersController extends Controller
     public function index(Request $request): Response
     {
         $token = $request->cookie('jwt_token');
-        echo($token);
+        // echo($token);
 
         $users = User::orderBy('created_at', 'desc')->paginate(10);
         Storage::disk('local')->put('example.txt', 'Contents');

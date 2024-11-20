@@ -12,11 +12,10 @@ use App\Http\Middleware\JWTMiddleware;
 use App\Http\Middleware\SupervisorAndAdminMiddleware;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\TicketEditAccessMidlleware;
-use Illuminate\Broadcasting\BroadcastController;
 use Illuminate\Support\Facades\Broadcast;
 
 // Route::post('/mybroadcasting/auth', [BroadcastingController::class, 'authorize']);
-
+// Route::post('/broadcasting/auth', [BroadcastingController::class, 'authorize']);
 
 Route::middleware([JWTMiddleware::class])->group(function () {
 
@@ -73,7 +72,7 @@ Route::middleware([JWTMiddleware::class])->group(function () {
 	Route::get('/notifications', [UserNotificationsController::class, 'index'])->name('notifications.index');
 
 	// Route::post('/broadcasting/auth', [BroadcastController::class, 'authenticate']);
-	Broadcast::routes();
+	// Broadcast::routes();
 
 
 

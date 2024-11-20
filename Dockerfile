@@ -39,6 +39,10 @@ COPY --chown=www-data:www-data . /var/www
 # Change current user to www
 USER www-data
 
+RUN php artisan config:cache && \
+    php artisan route:cache && \
+    php artisan view:cache
+
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
-CMD ["php-fpm"]
+# CMD ["php-fpm"]

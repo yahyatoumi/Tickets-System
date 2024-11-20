@@ -5,6 +5,7 @@ import { route } from 'ziggy-js';
 import { addIcons } from 'oh-vue-icons';
 import { OhVueIcon } from 'oh-vue-icons';
 import { MdExpandmore, FcMenu, IoTicket, BiChatFill, MdNotificationsSharp } from 'oh-vue-icons/icons';
+import Cookies from 'js-cookie';
 
 import Echo from 'laravel-echo';
  
@@ -19,6 +20,7 @@ createInertiaApp({
     return pages[`./Pages/${name}.vue`]
   },
   setup({ el, App, props, plugin }) {
+    const token = Cookies.get('XSRF-TOKEN');
 
     window.Echo = new Echo({
       broadcaster: 'reverb',
@@ -28,11 +30,11 @@ createInertiaApp({
       wssPort: import.meta.env.VITE_REVERB_PORT,
       forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
       enabledTransports: ['ws', 'wss'],
-      authEndpoint: "/api/mybroadcasting/auth",
       auth: {
         headers: {
-          // 'Authorization': `Bearer ${jwtToken}`, // Include JWT token in the Authorization header
-          // 'Accept': 'application/json' // Add the Accept header to specify JSON response
+          withCredentials: true,
+          'X-XSRF-TOKEN': token,
+          'Accept': 'application/json, text/plain, */*' // Add the Accept header to specify JSON response
         }
       }
     });

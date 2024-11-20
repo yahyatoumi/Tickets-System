@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\TicketCreatedEvent;
 use App\Events\TestEvent;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendMessage;
 use App\Models\Notification;
 use App\Models\Ticket;
 use App\Models\UploadedFile;
@@ -23,13 +24,23 @@ class TicketController extends Controller
 {
     public function from_you(Request $request): Response
     {
+        // Log::info("from_you");
+
+        // Log::info('Request details:', [
+        //     'headers' => $request->headers->all(),
+        //     'query_params' => $request->query->all(),
+        //     'body_params' => $request->all(),
+        //     'cookies' => $request->cookies->all(),
+        //     'ip' => $request->ip(),
+        //     'url' => $request->fullUrl(),
+        //     'method' => $request->method(),
+        // ]);
         // Retrieve the JWT token from the cookie
         $token = $request->cookie('jwt_token');
 
         // Get the authenticated user from the token
         $user = JWTAuth::toUser($token);
 
-        TicketCreatedEvent::dispatch();
 
 
         // Fetch tickets where submitter_id matches the authenticated user's ID
@@ -110,15 +121,20 @@ class TicketController extends Controller
             'submitter_id' => $user->id,
         ]);
 
+        // broadcast(new TicketCreatedEvent($ticket));
+        
         $ticket->load('submitter');
-
+        
         $admins = User::where('role', 'admin')->get();
         foreach ($admins as $admin) {
-            if ($admin->id !== $user->id)
+            if ($admin->id !== $user->id){
+                event(new TicketCreatedEvent($ticket, $admin));
                 $admin->notify(new NewNotification($ticket, $user));
+            }
         }
 
         $ticket->submitter->notify(new NewNotification($ticket, $user));
+        // event(new TicketCreatedEvent($ticket, $user));
 
 
         if ($request->hasFile('files')) {

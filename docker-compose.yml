@@ -9,8 +9,8 @@ services:
     container_name: my-laravel-app
     restart: unless-stopped
     working_dir: /var/www
-    ports:
-      - "9000:9000"
+    # ports:
+    #   - "9000:9000"
     volumes:
       - ./:/var/www
       - ./.env:/var/www/.env
@@ -18,6 +18,7 @@ services:
       - APP_ENV=local
     networks:
       - app-network
+    command: sh -c "php artisan migrate && php-fpm"
 
   nginx:
     image: nginx:alpine
@@ -38,8 +39,8 @@ services:
       dockerfile: Dockerfile.node
     image: my-laravel-node
     container_name: my-laravel-node
-    ports:
-      - "3000:3000"
+    # ports:
+    #   - "3000:3000"
     restart: unless-stopped
     working_dir: /var/www
     volumes:
@@ -58,6 +59,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - dbdata:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
     networks:
       - app-network
     ports:

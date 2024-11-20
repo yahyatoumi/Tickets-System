@@ -15,17 +15,16 @@ class UserNotificationsController extends Controller
     {
         // Retrieve the JWT token from the cookie
         $token = $request->cookie('jwt_token');
-
+        
         // Get the authenticated user from the token
         $user = JWTAuth::toUser($token);
+
+        $user->unreadNotifications->markAsRead();
 
         $latestNotifications = $user
                 ->notifications()
                 ->latest()
                 ->paginate(10);
-
-        
-        $user->unreadNotifications->markAsRead();
 
         return Inertia::render('Notifications/Index', [
             'latest_notifications' => $latestNotifications,

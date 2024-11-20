@@ -7,22 +7,22 @@
 
 export default {
    mounted() {
-      Echo.private(`channel-name`)
-         .listen("MessageSent", (response) => {
-            messages.value.push(response.message);
-         })
-         .listenForWhisper("typing", (response) => {
-            isUserTyping.value = response.userID === props.user.id;
+      // Echo.private(`channel-name`)
+      //    .listen("MessageSent", (response) => {
+      //       messages.value.push(response.message);
+      //    })
+      //    .listenForWhisper("typing", (response) => {
+      //       isUserTyping.value = response.userID === props.user.id;
 
-            if (isUserTypingTimer.value) {
-               clearTimeout(isUserTypingTimer.value);
-            }
+      //       if (isUserTypingTimer.value) {
+      //          clearTimeout(isUserTypingTimer.value);
+      //       }
 
-            isUserTypingTimer.value = setTimeout(() => {
-               isUserTyping.value = false;
-            }, 1000);
-         });
-      console.log("notifications: ", this.notifications);
+      //       isUserTypingTimer.value = setTimeout(() => {
+      //          isUserTyping.value = false;
+      //       }, 1000);
+      //    });
+      // console.log("notifications: ", this.notifications);
    },
 
 }

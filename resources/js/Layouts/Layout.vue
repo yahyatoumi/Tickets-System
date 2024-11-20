@@ -27,6 +27,8 @@
 import SideBarNav from '@/Shared/SideBarNav.vue'
 import Header from '@/Shared/Header.vue'
 import FlashMessages from '@/Shared/FlashMessages.vue'
+import { notificationsStore } from '@/store/notifications/store.js'
+
 
 
 
@@ -36,8 +38,14 @@ export default {
     Header,
     FlashMessages,
   },
-  props: {
-    auth: Object,
+  computed: {
+    unreadCount() {
+      return this.$page.props.notifications.unread_count
+    },
   },
+  mounted(){
+    console.log("initia staete", this.unreadCount)
+    notificationsStore.update(this.unreadCount);
+  }
 }
 </script>

@@ -18,6 +18,9 @@
         <div class="md:text-md flex items-center justify-between p-4 w-full text-sm bg-white border-b md:px-12 md:py-0">
             <div></div>
             <div class="flex items-center gap-4">
+                <!-- <div @click="event">
+                    xxxx
+                </div> -->
                 <notifications />
                 <dropdown class="mt-1" placement="bottom-end">
                     <template #default>
@@ -85,11 +88,12 @@ export default {
     computed: {
         auth() {
             return this.$page.props.auth
-        }
+        },
     },
     methods: {
-        isEndUser
-    }
+        isEndUser,
+    },
+    
 
 }
 </script>

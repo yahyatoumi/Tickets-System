@@ -51,7 +51,8 @@ class UserController extends Controller
             }
 
             // Create a cookie to store the JWT token
-            $cookie = cookie('jwt_token', $token, 60 * 24, '/', null, false, true);
+            // $cookie = cookie('jwt_token', $token, 60 * 24, '/', null, false, true);
+            $cookie = cookie('jwt_token', $token, 60 * 24, '/', null, true, true, false, 'None');
 
             // Return the token in the cookie or redirect to the home page
             return redirect('/')->withCookie($cookie);
