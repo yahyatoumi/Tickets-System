@@ -6,9 +6,10 @@ import { addIcons } from 'oh-vue-icons';
 import { OhVueIcon } from 'oh-vue-icons';
 import { MdExpandmore, FcMenu, IoTicket, BiChatFill, MdNotificationsSharp } from 'oh-vue-icons/icons';
 import Cookies from 'js-cookie';
+import { notificationsStore } from '@/store/notifications/store.js'
 
 import Echo from 'laravel-echo';
- 
+
 import Pusher from 'pusher-js';
 window.Pusher = Pusher;
 
@@ -39,12 +40,25 @@ createInertiaApp({
       }
     });
 
-    createApp({ render: () => h(App, props) })
-      .use(plugin)
+    // createApp({ render: () => h(App, props) })
+    //   .use(plugin)
+    //   .provide('route', route) // Make Ziggy available globally as 'route'
+    //   .component("Link", Link)
+    //   .component("Head", Head)
+    //   .component('v-icon', OhVueIcon)
+    //   .mount(el)
+
+    const app = createApp({ render: () => h(App, props) })
+
+    app.use(plugin)
+      // .use(ZiggyVue)
       .provide('route', route) // Make Ziggy available globally as 'route'
       .component("Link", Link)
       .component("Head", Head)
       .component('v-icon', OhVueIcon)
-      .mount(el)
+
+    app.config.globalProperties.$notificationsStore = notificationsStore
+
+    app.mount(el)
   },
 })

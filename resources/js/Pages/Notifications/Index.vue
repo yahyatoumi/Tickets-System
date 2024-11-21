@@ -3,7 +3,8 @@
 
         <Head title="Notifications" />
         <h1 class="mb-8 text-3xl font-bold">Notifications</h1>
-        <single-notification v-for="notification in latest_notifications.data" :key="notification.id" :notification="notification" />
+        <single-notification v-for="notification in latest_notifications.data" :key="notification.id"
+            :notification="notification" />
         <pagination class="mt-6" :links="latest_notifications.links" />
     </div>
 </template>
@@ -37,6 +38,7 @@ export default {
     },
     mounted() {
         console.log("notificationsss", this.latest_notifications)
+        this.$notificationsStore.update(0)
     }
 
 }

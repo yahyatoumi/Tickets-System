@@ -9,7 +9,7 @@
 
           <!-- This is where toast will be inserted -->
           <flash-messages />
-          
+
           <!-- This is where page content will be inserted -->
           <slot></slot>
 
@@ -27,7 +27,6 @@
 import SideBarNav from '@/Shared/SideBarNav.vue'
 import Header from '@/Shared/Header.vue'
 import FlashMessages from '@/Shared/FlashMessages.vue'
-import { notificationsStore } from '@/store/notifications/store.js'
 
 
 
@@ -39,13 +38,13 @@ export default {
     FlashMessages,
   },
   computed: {
-    unreadCount() {
-      return this.$page.props.notifications.unread_count
-    },
+    // notificationCount() {
+    //   return this.$page.props.notifications.unread_count
+    // }
   },
   mounted(){
-    console.log("initia staete", this.unreadCount)
-    notificationsStore.update(this.unreadCount);
+    console.log(";o;o;o;", this.$page.props.notifications.unread_count)
+    this.$notificationsStore.update(this.$page.props.notifications.unread_count)
   }
 }
 </script>

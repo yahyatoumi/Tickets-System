@@ -9,4 +9,4 @@ export const notificationsStore = reactive({
   update(newState){
     this.count = newState;
   }
-})
+})  

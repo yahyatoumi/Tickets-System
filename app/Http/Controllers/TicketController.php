@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\TicketCreatedEvent;
 use App\Events\TestEvent;
+use App\Events\TicketCreatedEvent;
+use App\Events\TicketUpdateEvent;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendMessage;
 use App\Models\Notification;
@@ -122,18 +123,11 @@ class TicketController extends Controller
         ]);
 
         // broadcast(new TicketCreatedEvent($ticket));
-        
-        $ticket->load('submitter');
-        
-        $admins = User::where('role', 'admin')->get();
-        foreach ($admins as $admin) {
-            if ($admin->id !== $user->id){
-                event(new TicketCreatedEvent($ticket, $admin));
-                $admin->notify(new NewNotification($ticket, $user));
-            }
-        }
 
-        $ticket->submitter->notify(new NewNotification($ticket, $user));
+        $ticket->load('submitter');
+
+        $ticket->broadcastCreationToAdminsAndOwner(TicketCreatedEvent::class);
+
         // event(new TicketCreatedEvent($ticket, $user));
 
 
@@ -229,21 +223,34 @@ class TicketController extends Controller
                 ->with('error', 'Failed to update ticket.');
         }
 
-        // Update the user details
-        $ticket->update([
-            'title' => $request->title && $user->canChange($ticket, "title")
-                ? $request->title
-                : $ticket->title,
-            'description' => $request->description && $user->canChange($ticket, "description")
-                ? $request->description
-                : $ticket->description,
-            'assigned_tech_id' => $request->assigned_tech_id && $user->canChange($ticket, "assigned_tech_id")
-                ? $request->assigned_tech_id
-                : $ticket->assigned_tech_id,
-            'status' => $request->status && $user->canChange($ticket, "status")
-                ? $request->status
-                : $ticket->status,
-        ]);
+        $updates = [];
+        $updatedFields = [];
+
+        if ($request->title && $ticket->title !== $request->title && $user->canChange($ticket, "title")) {
+            $updates['title'] = $request->title;
+            $updatedFields[] = 'title';
+        }
+
+        if ($request->description && $ticket->description !== $request->description && $user->canChange($ticket, "description")) {
+            $updates['description'] = $request->description;
+            $updatedFields[] = 'description';
+        }
+
+        if ($request->assigned_tech_id && $ticket->assigned_tech_id !== $request->assigned_tech_id && $user->canChange($ticket, "assigned_tech_id")) {
+            $updates['assigned_tech_id'] = $request->assigned_tech_id;
+            $updatedFields[] = 'assigned_tech_id';
+        }
+
+        if ($request->status && $ticket->status !== $request->status && $user->canChange($ticket, "status")) {
+            $updates['status'] = $request->status;
+            $updatedFields[] = 'status';
+        }
+
+        if (!empty($updates)) {
+            $ticket->update($updates);
+        }
+
+        $ticket->broadcastUpdateToAdminsAndOwner($user, $updatedFields);
 
         return redirect()->route('tickets.fromyou.index')->with('success', 'ticket updated successfully.');
     }

@@ -10,24 +10,25 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use InvalidArgumentException;
 
-class NewNotification extends Notification
+class TicketUpdateNotification extends Notification
 {
     use Queueable;
 
     public Ticket $ticket;
     public User $user;
-    public string $action;
-    public array $updatedFields;
     public User $updater;
+    public array $updatedFields;
+
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(Ticket $ticket, User $user, string $action, array $updatedFields = [])
+    public function __construct(Ticket $ticket, User $user, User $updater, array $updatedFields = [])
     {
-
         $this->ticket = $ticket;
         $this->user = $user;
+        $this->updater = $updater;
+        $this->updatedFields = $updatedFields;
     }
 
     /**
@@ -59,10 +60,10 @@ class NewNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'user' => $this->user,
+            'updater' => $this->updater,
             'ticket' => $this->ticket,
-            'type' => "created",
-
+            'type' => "updated",
+            'updated_fields' => $this->updatedFields,
         ];
     }
 }

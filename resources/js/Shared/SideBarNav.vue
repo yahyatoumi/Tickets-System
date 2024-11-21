@@ -11,9 +11,9 @@
         Notifications
       </div>
       <div class="group flex items-center cursor-pointer select-none relative">
-        <div v-if="notificationsStore.count > 0"
+        <div v-if="$notificationsStore.count > 0"
           class="w-4 h-4 absolute -right-1 -top-1 rounded-full flex bg-red-500 text-white justify-center items-center text-[10px] font-bold">
-          {{ notificationsStore.count }}
+          {{ $notificationsStore.count }}
         </div>
         <v-icon name="md-notifications-sharp" class="text-gray-400 w-6 h-6" />
       </div>
@@ -43,18 +43,12 @@
 <script>
 import { Link } from '@inertiajs/vue3'
 import { isEndUser } from '@/helpers/rolesHelpers';
-import { notificationsStore } from '@/store/notifications/store.js'
 
 
 
 export default {
   components: {
     Link,
-  },
-  data() {
-    return {
-      notificationsStore
-    }
   },
   computed: {
     auth() {
@@ -76,7 +70,12 @@ export default {
       .listen(".ticket.created", (response) => {
         // messages.value.push(response.message);
         console.log("event catcheddd");
-        this.notificationsStore.increment();
+        this.$notificationsStore.increment()
+      })
+      .listen(".ticket.updated", (response) => {
+        // messages.value.push(response.message);
+        console.log("event catcheddd");
+        this.$notificationsStore.increment()
       })
   }
 }
