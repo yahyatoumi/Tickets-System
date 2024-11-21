@@ -6,7 +6,7 @@
       </Link>
     </div>
     <div class="mb-4">
-      <Link class="group flex items-center gap-2 py-3" href="/notifications">
+      <Link :only="['latest_notifications']" class="group flex items-center gap-2 py-3" href="/notifications">
       <div :class="isUrl('/notifications') ? 'text-white' : 'text-indigo-300 group-hover:text-white'">
         Notifications
       </div>
@@ -20,13 +20,13 @@
       </Link>
     </div>
     <div class="mb-4">
-      <Link class="group flex items-center gap-2 py-3" href="/tickets/fromyou">
+      <Link :only="['tickets']" class="group flex items-center gap-2 py-3" href="/tickets/fromyou">
       <div :class="isUrl('/tickets/fromyou') ? 'text-white' : 'text-indigo-300 group-hover:text-white'">{{
         !isEndUser(auth) ? "From you" : "Tickets" }}</div>
       <v-icon name="io-ticket" class="fill-gray-400 group-hover:fill-white" />
       </Link>
     </div>
-    <div v-if="!isEndUser(auth)" class="mb-4">
+    <div :only="['tickets']" v-if="!isEndUser(auth)" class="mb-4">
       <Link class="group flex items-center gap-2 py-3" href="/tickets/toyou">
       <div :class="isUrl('/tickets/toyou') ? 'text-white' : 'text-indigo-300 group-hover:text-white'">To you</div>
       <v-icon name="io-ticket" class="fill-gray-400 group-hover:fill-white" />

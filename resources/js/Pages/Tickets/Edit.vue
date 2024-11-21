@@ -7,15 +7,16 @@
             <span class="text-indigo-400 font-medium">/</span>
             {{ form.title }}
         </h1>
-        <div class="max-w-3xl bg-white rounded-md shadow overflow-hidden">
+        <div class="max-w-3xl bg-white rounded-md shadow overflow-hidden mb-8">
             <form @submit.prevent="update">
                 <div class="flex flex-wrap -mb-8 -mr-6 p-8">
-                    <text-input :readonly="!canEditFieldOfTicket(auth, 'title', submitter.id)" v-model="form.title" :error="form.errors.title" class="pb-8 pr-6 w-full lg:w-1/2"
-                        label="Title *" />
-                    <textarea-input :readonly="!canEditFieldOfTicket(auth, 'description', submitter.id)" v-model="form.description" :error="form.errors.description"
-                        class="pb-8 pr-6 w-full lg:w-1/2" label="description" />
-                    <select-input :disabled="!canEditFieldOfTicket(auth, 'status', submitter.id)" v-model="form.status" :error="form.errors.status"
-                        class="pb-8 pr-6 w-full lg:w-1/2" label="Status">
+                    <text-input :readonly="!canEditFieldOfTicket(auth, 'title', submitter.id)" v-model="form.title"
+                        :error="form.errors.title" class="pb-8 pr-6 w-full lg:w-1/2" label="Title *" />
+                    <textarea-input :readonly="!canEditFieldOfTicket(auth, 'description', submitter.id)"
+                        v-model="form.description" :error="form.errors.description" class="pb-8 pr-6 w-full lg:w-1/2"
+                        label="description" />
+                    <select-input :disabled="!canEditFieldOfTicket(auth, 'status', submitter.id)" v-model="form.status"
+                        :error="form.errors.status" class="pb-8 pr-6 w-full lg:w-1/2" label="Status">
                         <option value="pending">Pending</option>
                         <option value="in_progress">In progress</option>
                         <option value="resolved">Resolved</option>
@@ -54,6 +55,9 @@
                 </div>
             </form>
         </div>
+        <div class="max-w-3xl bg-white rounded-md shadow overflow-hidden">
+            <comments-in-ticket />
+        </div>
     </div>
 </template>
 
@@ -71,6 +75,7 @@ import axios from 'axios'
 import { isAdmin, isEndUser, canSeeFieldOfTicket, canEditFieldOfTicket } from '@/helpers/rolesHelpers'
 import { isSupervisor } from '@/helpers/rolesHelpers'
 import FilesInEdit from "./Shared/FilesInEdit.vue"
+import CommentsInTicket from "@/Shared/CommentsInTicket.vue"
 
 
 
@@ -85,7 +90,8 @@ export default {
         TrashedMessage,
         TextareaInput,
         SearchInput,
-        FilesInEdit
+        FilesInEdit,
+        CommentsInTicket
     },
     layout: Layout,
     props: {

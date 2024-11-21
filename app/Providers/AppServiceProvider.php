@@ -21,28 +21,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Inertia::share('auth', function () {
-            $user = JWTAuth::user();
-
-            return [
-                'user' => $user
-                    ? $user->only('id', 'username', 'email', 'created_at', "role") // adjust fields as needed
-                    : null,
-            ];
-        });
-
-        // Share notifications
+        Inertia::share('auth', fn() => [
+            'user' => fn() => optional(JWTAuth::user())->only('id', 'username', 'email', 'created_at', 'role'),
+        ]);
+        
         Inertia::share('notifications', function () {
             $user = JWTAuth::user();
             if (!$user) {
                 return [];
             }
-            $latestNotifications = $user
-                ->notifications()
-                ->latest()
-                ->take(10)
-                ->get();
-
             $unreadCount = $user->unreadNotifications()
                 ->count();
 

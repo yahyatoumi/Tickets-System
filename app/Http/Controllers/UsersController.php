@@ -21,14 +21,26 @@ class UsersController extends Controller
 {
     public function index(Request $request): Response
     {
-        $token = $request->cookie('jwt_token');
-        // echo($token);
-
-        $users = User::orderBy('created_at', 'desc')->paginate(10);
-        Storage::disk('local')->put('example.txt', 'Contents');
-
         return Inertia::render('Users/Index', [
-            'users' => $users,
+            // ALWAYS included on standard visits
+            // OPTIONALLY included on partial reloads
+            // ALWAYS evaluated
+            // 'users' => User::orderBy('created_at', 'desc')->paginate(10),
+
+            // ALWAYS included on standard visits
+            // OPTIONALLY included on partial reloads
+            // ONLY evaluated when needed
+            'users' => fn() => User::orderBy('created_at', 'desc')->paginate(10),
+
+            // NEVER included on standard visits
+            // OPTIONALLY included on partial reloads
+            // ONLY evaluated when needed
+            // 'users' => Inertia::lazy(fn() => User::orderBy('created_at', 'desc')->paginate(10)),
+
+            // ALWAYS included on standard visits
+            // ALWAYS included on partial reloads
+            // ALWAYS evaluated
+            // 'users' => Inertia::always(User::orderBy('created_at', 'desc')->paginate(10)),
         ]);
     }
 
@@ -120,7 +132,7 @@ class UsersController extends Controller
         return redirect()->route('users.index')->with('success', 'User deleted successfully.');
     }
 
-    public function search(Request $request, Ticket $ticket)
+    public function search(Request $request)
     {
         // Get search query from request
         $query = $request->input('query');

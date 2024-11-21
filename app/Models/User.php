@@ -142,4 +142,11 @@ class User extends Authenticatable implements JWTSubject
 
         return $can_edit;
     }
+
+    public function canComment(Ticket $ticket)
+    {
+        $can_edit = $this->isAdmin() || $this->id === $ticket->submitter_id || $this->id === $ticket->assigned_tech_id;
+
+        return $can_edit;
+    }
 }
