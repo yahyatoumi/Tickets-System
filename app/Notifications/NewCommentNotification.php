@@ -59,7 +59,7 @@ class NewCommentNotification extends Notification
         return [
             'user' => $this->user,
             'comment' => $this->comment,
-            'type' => "created",
+            'type' => "comment",
             //
         ];
     }

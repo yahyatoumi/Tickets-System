@@ -12,9 +12,10 @@
                         <span class="text-indigo-700">{{ actor }}</span>
                         <span v-if="type === 'created'"> created a new ticket: </span>
                         <span v-if="type === 'updated'"> updated the ticket: </span>
-                        <Link 
-                        :href="`/tickets/${ticket.id}/edit`"
-                        class="text-indigo-700">{{ ticket.title }}</Link>
+                        <span v-if="type === 'comment'"> commented on ticket: </span>
+                        <Link v-if="type !== 'comment'" :href="`/tickets/${ticket.id}/edit`" class="text-indigo-700">{{
+                        ticket.title }}</Link>
+                        <Link v-if="type === 'comment'" :href="`/tickets/${comment.ticket_id}/edit`" class="text-indigo-700 cursor-pointer"></Link>
                     </p>
                     <div tabindex="0" aria-label="close icon" role="button" class="focus:outline-none cursor-pointer">
                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -37,25 +38,28 @@ export default {
         notification: Object,
     },
     computed: {
-        auth(){
+        auth() {
             return this.$page.props.auth
         },
         ticket() {
             return this.notification.data.ticket
         },
+        comment(){
+            return this.notification.data?.comment
+        },
         type() {
             return this.notification.data.type
         },
-        actor(){
+        actor() {
             let actor = null;
-            if (this.type === "created"){
+            if (this.type === "created") {
                 actor = this.ticket.submitter
             }
-            else if (this.type === "updated"){
+            else if (this.type === "updated") {
                 actor = this.notification.data.updater
             }
 
-            if (actor?.id === this.auth.user.id){
+            if (actor?.id === this.auth.user.id) {
                 return "You"
             }
             return actor?.username
