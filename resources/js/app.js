@@ -31,22 +31,16 @@ createInertiaApp({
       wssPort: import.meta.env.VITE_REVERB_PORT,
       forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
       enabledTransports: ['ws', 'wss'],
+      authEndpoint: '/api/mybroadcasting/auth', // Correct key for overriding the auth endpoint
       auth: {
         headers: {
           withCredentials: true,
           'X-XSRF-TOKEN': token,
           'Accept': 'application/json, text/plain, */*' // Add the Accept header to specify JSON response
-        }
+        },
       }
     });
 
-    // createApp({ render: () => h(App, props) })
-    //   .use(plugin)
-    //   .provide('route', route) // Make Ziggy available globally as 'route'
-    //   .component("Link", Link)
-    //   .component("Head", Head)
-    //   .component('v-icon', OhVueIcon)
-    //   .mount(el)
 
     const app = createApp({ render: () => h(App, props) })
 

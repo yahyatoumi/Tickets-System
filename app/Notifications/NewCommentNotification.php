@@ -2,29 +2,30 @@
 
 namespace App\Notifications;
 
-use App\Models\Ticket;
+use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use InvalidArgumentException;
+use Illuminate\Support\Facades\Log;
 
-class NewNotification extends Notification
+class NewCommentNotification extends Notification
 {
     use Queueable;
 
-    public Ticket $ticket;
+    public Comment $comment;
     public User $user;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(Ticket $ticket, User $user)
+    public function __construct(Comment $comment, User $user)
     {
-
-        $this->ticket = $ticket;
+        
+        $this->comment = $comment;
         $this->user = $user;
+        //
     }
 
     /**
@@ -57,9 +58,9 @@ class NewNotification extends Notification
     {
         return [
             'user' => $this->user,
-            'ticket' => $this->ticket,
+            'comment' => $this->comment,
             'type' => "created",
-
+            //
         ];
     }
 }

@@ -18,15 +18,9 @@ class BroadcastingController extends Controller
     public function authorize(Request $request)
     {
 
-        $token = $request->cookie('jwt_token');
-        Log::info('Token from cookie: ', ['token' => $token]);
-
-        if (!$token) {
-            Log::error('No token found in cookie.');
-            return response()->json(['error' => 'Token is required'], 400);
-        }
-
-        $user = JWTAuth::toUser($token);
+        $user = JWTAuth::user();
+        Log::info("usrrrrrr");
+        Log::info($user);
         
         return response()->json(['auth' => true], 201);
     }

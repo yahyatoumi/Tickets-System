@@ -7,10 +7,12 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserNotificationsController;
 use App\Http\Controllers\BroadcastingController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\UsersController;
 use App\Http\Middleware\JWTMiddleware;
 use App\Http\Middleware\SupervisorAndAdminMiddleware;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\CommentInTicketMiddleware;
 use App\Http\Middleware\TicketEditAccessMidlleware;
 use Illuminate\Support\Facades\Broadcast;
 
@@ -71,6 +73,12 @@ Route::middleware([JWTMiddleware::class])->group(function () {
 
 	Route::get('/notifications', [UserNotificationsController::class, 'index'])->name('notifications.index');
 
+	Route::middleware([CommentInTicketMiddleware::class])->group(function () {
+		Route::get('/comments/{ticket}', [CommentController::class, 'index'])->name('comments.ticket.index');
+		Route::post('/comments/{ticket}', [CommentController::class, 'create'])->name('comments.ticket.create');
+	});
+
+
 	// Route::post('/broadcasting/auth', [BroadcastController::class, 'authenticate']);
 	// Broadcast::routes();
 
@@ -80,8 +88,6 @@ Route::middleware([JWTMiddleware::class])->group(function () {
 	// No need for auth
 	Route::get('/login', [UserController::class, 'login'])->name('user.login');
 	Route::post('/login', [UserController::class, 'login']);
-
-
 });
 
 

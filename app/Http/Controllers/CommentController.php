@@ -8,12 +8,24 @@ use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class CommentController extends Controller
 {
+    // public function index(Request $request, $ticketId): Response
+    // {
+    //     return Inertia::render('Users/Index', [
+    //         'comments' => fn() => Comment::where('ticket_id', $ticketId)
+    //         ->orderBy('created_at', 'desc')
+    //         ->paginate(10),
+    //     ]);
+    // }
+
     public function create(Request $request, Ticket $ticket)
     {
         // Post request
@@ -25,30 +37,25 @@ class CommentController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect('')
+            return back()
                 ->withErrors($validator)
                 ->withInput()
                 ->with('error', 'Failed to create user.'); // Keeps the user's input data
         }
 
-        $input = $request->all();
-
-        // Retrieve the JWT token from the cookie
-        // $token = $request->cookie('jwt_token');
-
-        // // Get the authenticated user from the token
-        // $user = JWTAuth::toUser($token);
-
         $user = JWTAuth::user();
 
-        $input['user_id'] = $user->id;
+        $comment = new Comment();
+        $comment->body = $request->body; // Set the body from the request
+        $comment->ticket_id = $ticket->id; // Assign ticket_id manually
+        $comment->user_id = $user->id; // Assign user_id manually
+        $comment->save();
 
-        $user = Comment::create($input);
+        $comment->broadcastCommentToAdminsAndOwner($user);
 
-        return back();
-
-        // You can use a different response or redirect after successful registration
-        // return Redirect::route('notifications.index')->with('success', 'User created.');
+        return back()->with([
+            'newComment' => $comment,
+        ]);
     }
     //
 }

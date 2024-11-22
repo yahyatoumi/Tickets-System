@@ -66,7 +66,7 @@ export default {
     isEndUser,
   },
   created() {
-    window.Echo.channel(`channel_for_everyone.${this.auth.user.id}`)
+    window.Echo.channel (`channel_for_everyone.${this.auth.user.id}`)
       .listen(".ticket.created", (response) => {
         // messages.value.push(response.message);
         console.log("event catcheddd");

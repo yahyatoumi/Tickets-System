@@ -192,8 +192,14 @@ class TicketController extends Controller
             }
         }
 
+        $ticketData['submitter'] = $ticket->submitter;
+
         return Inertia::render('Tickets/Edit', [
             'ticket' => $ticketData,
+            'comments' => fn() => $ticket->comments()
+                ->with('user') // Eager load related user if needed
+                ->orderBy('created_at', 'desc')
+                ->paginate(10),
         ]);
     }
 

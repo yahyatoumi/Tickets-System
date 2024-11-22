@@ -75,7 +75,7 @@ import axios from 'axios'
 import { isAdmin, isEndUser, canSeeFieldOfTicket, canEditFieldOfTicket } from '@/helpers/rolesHelpers'
 import { isSupervisor } from '@/helpers/rolesHelpers'
 import FilesInEdit from "./Shared/FilesInEdit.vue"
-import CommentsInTicket from "@/Shared/CommentsInTicket.vue"
+import CommentsInTicket from "@/Shared/Comments/CommentsInTicket.vue"
 
 
 

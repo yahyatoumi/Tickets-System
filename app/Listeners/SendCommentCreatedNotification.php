@@ -2,14 +2,13 @@
 
 namespace App\Listeners;
 
-use App\Events\TicketCreatedEvent;
-use App\Models\User;
-use App\Notifications\NewNotification;
+use App\Events\CommentEvent;
+use App\Notifications\NewCommentNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 
-class SendTicketCreatedNotification
+class SendCommentCreatedNotification
 {
     /**
      * Create the event listener.
@@ -22,14 +21,14 @@ class SendTicketCreatedNotification
     /**
      * Handle the event.
      */
-    public function handle(TicketCreatedEvent $event): void
+    public function handle(CommentEvent $event): void
     {
-        $ticket = $event->ticket;
-        $ticket->load('submitter');
+        $comment = $event->comment;
 
         $user = $event->user;
 
         Log::info("brodcasted from listener");
-        $user->notify(new NewNotification($ticket, $user));
+        $user->notify(new NewCommentNotification($comment, $user));
+        //
     }
 }

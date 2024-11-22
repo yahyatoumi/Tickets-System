@@ -24,6 +24,7 @@
         "@inertiajs/progress": "^0.2.7",
         "@inertiajs/vue3": "^1.2.0",
         "@popperjs/core": "^2.11.8",
+        "date-fns": "^4.1.0",
         "js-cookie": "^3.0.5",
         "lodash": "^4.17.21",
         "oh-vue-icons": "^1.0.0-rc3",

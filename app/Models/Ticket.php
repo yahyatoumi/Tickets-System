@@ -6,6 +6,7 @@ use App\Events\TicketCreatedEvent;
 use App\Events\TicketUpdateEvent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Log;
 
 class Ticket extends Model
 {
@@ -26,6 +27,10 @@ class Ticket extends Model
 
     public function assignedTech()
     {
+        Log::info(";;;;pppppppp");
+        Log::info($this->assigned_tech_id);
+        if (!$this->assigned_tech_id)
+            return null;
         return $this->belongsTo(User::class, 'assigned_tech_id');
     }
 

@@ -14,10 +14,9 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->integer('user_id')->unsigned();
-            // $table->integer('ticket_id')->unsigned();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('ticket_id')->constrained('tickets')->onDelete('cascade');
-            $table->integer('parent_id')->unsigned()->nullable();
+            $table->integer('parent_id')->nullable()->constrained('comments')->onDelete('cascade');
             $table->text('body');
             $table->softDeletes();
         });

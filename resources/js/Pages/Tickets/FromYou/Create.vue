@@ -60,7 +60,9 @@ export default {
   methods: {
     store() {
       // console.log(this.form)
-      this.form.post('/tickets/fromyou/create')
+      this.form.post('/tickets/fromyou/create', {
+        only: ['comments'],
+      })
     },
     show(){
       console.log("fileeee:", this.form.files)
