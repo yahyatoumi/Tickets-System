@@ -54,14 +54,14 @@ class Comment extends Model
         $ticketSubmitter = User::find($ticket->submitter_id);
         if ($ticket->submitter_id !== $whoCommented->id) {
             $excludeIds[] = $ticket->submitter_id;
-            event(new CommentEvent($this, $ticketSubmitter));
+            event(new CommentEvent($this, $ticketSubmitter, $ticket, $whoCommented));
         }
 
         $assignedTech = User::find($ticket->assigned_tech_id);
         // Notify assigned tech if exists and not the commenter
         if ($ticket->assigned_tech_id && $ticket->assigned_tech_id !== $whoCommented->id) {
             if ($assignedTech) {
-                event(new CommentEvent($this, $assignedTech));
+                event(new CommentEvent($this, $assignedTech, $ticket, $whoCommented));
                 $excludeIds[] = $ticket->assigned_tech_id;
             }
         }
@@ -72,7 +72,7 @@ class Comment extends Model
             ->get();
 
         foreach ($admins as $admin) {
-            event(new CommentEvent($this, $admin));
+            event(new CommentEvent($this, $admin, $ticket, $whoCommented));
         }
     }
 }

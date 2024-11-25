@@ -3,9 +3,9 @@
 
         <Head title="Notifications" />
         <h1 class="mb-8 text-3xl font-bold">Notifications</h1>
-        <single-notification v-for="notification in latest_notifications.data" :key="notification.id"
-            :notification="notification" />
-        <pagination class="mt-6" :links="latest_notifications.links" />
+        <single-notification v-for="notification in notifications.data"
+            :key="notification.id" :notification="notification" />
+        <pagination class="mt-6" :links="notifications.links" />
     </div>
 </template>
 
@@ -29,6 +29,11 @@ export default {
         latest_notifications: Object,
         auth: Object
     },
+    computed: {
+        notifications() {
+            return this.$notificationsStore.latest_notifications;
+        },
+    },
     methods: {
         navigateToEdit(userId) {
             if (isAdmin(this.auth))
@@ -38,8 +43,8 @@ export default {
     },
     mounted() {
         console.log("notificationsss", this.latest_notifications)
-        this.$notificationsStore.update(0)
+        this.$notificationsStore.updateCount(0)
+        this.$notificationsStore.setNotifications(this.latest_notifications)
     }
-
 }
 </script>

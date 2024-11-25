@@ -44,7 +44,7 @@ export default {
   },
   mounted(){
     console.log(";o;o;o;", this.$page.props.notifications.unread_count)
-    this.$notificationsStore.update(this.$page.props.notifications.unread_count)
+    this.$notificationsStore.updateCount(this.$page.props.notifications.unread_count)
   }
 }
 </script>

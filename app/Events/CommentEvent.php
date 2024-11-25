@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Models\Comment;
+use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -19,18 +20,19 @@ class CommentEvent implements ShouldBroadcast
 
     public Comment $comment;
     public User $user;
+    public Ticket $ticket;
+    public User $whoCommented;
+
 
     /**
      * Create a new event instance.
      */
-    public function __construct(Comment $comment, User $user)
+    public function __construct(Comment $comment, User $user, Ticket $ticket, User $whoCommented)
     {
-        Log::info("xxxxx");
-        Log::info($user);
-        Log::info($comment);
         $this->comment = $comment;
         $this->user = $user;
-        Log::info('TicketCreatedEvent dispatched', ['comment' => $comment, 'user' => $user]);
+        $this->ticket = $ticket;
+        $this->whoCommented = $whoCommented;
     }
 
     /**
@@ -51,7 +53,9 @@ class CommentEvent implements ShouldBroadcast
     {
         return [
             'comment' => $this->comment,
-            'user' => $this->user,
+            // 'user' => $this->user,
+            'ticket' => $this->ticket,
+            'whoCommented' => $this->whoCommented,
         ];
     }
 

@@ -4,7 +4,7 @@
             <!-- Icon changes based on type -->
             <div tabindex="0" aria-label="group icon" role="img"
                 class="focus:outline-none w-8 h-8 border rounded-full border-gray-200 flex flex-shrink-0 items-center justify-center">
-                <v-icon :name="iconForType('ticket')" :class="iconClassForType(type)" />
+                <v-icon :name="iconForType(type)" :class="iconClassForType(type)" />
             </div>
             <div class="pl-3 w-full">
                 <div class="flex items-center justify-between w-full">
@@ -13,9 +13,8 @@
                         <span v-if="type === 'created'"> created a new ticket: </span>
                         <span v-if="type === 'updated'"> updated the ticket: </span>
                         <span v-if="type === 'comment'"> commented on ticket: </span>
-                        <Link v-if="type !== 'comment'" :href="`/tickets/${ticket.id}/edit`" class="text-indigo-700">{{
-                        ticket.title }}</Link>
-                        <Link v-if="type === 'comment'" :href="`/tickets/${comment.ticket_id}/edit`" class="text-indigo-700 cursor-pointer"></Link>
+                        <Link :href="`/tickets/${ticket.id}/edit`" class="text-indigo-700">{{
+                            ticket.title }}</Link>
                     </p>
                     <div tabindex="0" aria-label="close icon" role="button" class="focus:outline-none cursor-pointer">
                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -44,7 +43,7 @@ export default {
         ticket() {
             return this.notification.data.ticket
         },
-        comment(){
+        comment() {
             return this.notification.data?.comment
         },
         type() {
@@ -57,6 +56,9 @@ export default {
             }
             else if (this.type === "updated") {
                 actor = this.notification.data.updater
+            }
+            else if (this.type === "comment") {
+                actor = this.notification.data.whoCommented
             }
 
             if (actor?.id === this.auth.user.id) {
@@ -72,17 +74,21 @@ export default {
     methods: {
         iconForType(type) {
             switch (type) {
-                case 'ticket':
+                case 'created':
                     return 'io-ticket';
                 case 'updated':
-                    return 'io-refresh';
+                    return 'io-ticket';
+                case 'comment':
+                    return 'fa-comment-alt';
                 default:
-                    return 'io-alert';
+                    return '';
             }
         },
         iconClassForType(type) {
             switch (type) {
                 case 'created':
+                    return 'fill-[#047857]';
+                case 'comment':
                     return 'fill-[#047857]';
                 case 'updated':
                     return 'fill-[#1E3A8A]';

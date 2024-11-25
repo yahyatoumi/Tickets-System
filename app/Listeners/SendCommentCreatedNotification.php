@@ -26,9 +26,11 @@ class SendCommentCreatedNotification
         $comment = $event->comment;
 
         $user = $event->user;
+        $whoCommented = $event->whoCommented;
+        $ticket = $event->ticket;
 
         Log::info("brodcasted from listener");
-        $user->notify(new NewCommentNotification($comment, $user));
+        $user->notify(new NewCommentNotification($comment, $user, $ticket, $whoCommented));
         //
     }
 }

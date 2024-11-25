@@ -16,6 +16,7 @@
 <script>
 import FilesInput from '@/Shared/UI/FilesInput.vue'
 import TextareaInput from '@/Shared/UI/TextareaInput.vue'
+import { commentsStore } from '@/store/comments/store';
 
 
 export default {
@@ -39,8 +40,10 @@ export default {
             this.form.post(`/comments/${ticketId}`, {
                 preserveScroll: true, // Prevent page scroll
                 only: ['comments'],
-                onSuccess: () => {
+                onSuccess: (ress) => {
                     this.form.reset();
+                    console.log("ressss", ress.props.comments)
+                    commentsStore.setComments(ress.props.comments)
                 },
                 onError: (errors) => {
                     console.error('Validation errors:', errors);

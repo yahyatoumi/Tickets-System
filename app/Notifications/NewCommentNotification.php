@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Models\Comment;
+use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -16,15 +17,19 @@ class NewCommentNotification extends Notification
 
     public Comment $comment;
     public User $user;
+    public User $whoCommented;
+    public Ticket $ticket;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(Comment $comment, User $user)
+    public function __construct(Comment $comment, User $user, Ticket $ticket, User $whoCommented)
     {
         
         $this->comment = $comment;
         $this->user = $user;
+        $this->ticket = $ticket;
+        $this->whoCommented = $whoCommented;
         //
     }
 
@@ -59,6 +64,8 @@ class NewCommentNotification extends Notification
         return [
             'user' => $this->user,
             'comment' => $this->comment,
+            'ticket' => $this->ticket,
+            'whoCommented' => $this->whoCommented,
             'type' => "comment",
             //
         ];

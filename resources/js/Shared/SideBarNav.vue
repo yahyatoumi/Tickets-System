@@ -43,6 +43,7 @@
 <script>
 import { Link } from '@inertiajs/vue3'
 import { isEndUser } from '@/helpers/rolesHelpers';
+import { commentsStore } from '@/store/comments/store';
 
 
 
@@ -76,6 +77,18 @@ export default {
         // messages.value.push(response.message);
         console.log("event catcheddd");
         this.$notificationsStore.increment()
+      })
+      .listen(".new.comment", (response) => {
+        // messages.value.push(response.message);
+        console.log("new comenttttt", response);
+        this.$notificationsStore.addNotification(response)
+
+        const newComment = {
+          ...response.comment,
+          user: response.whoCommented
+        }
+        commentsStore.addComment(newComment);
+
       })
   }
 }

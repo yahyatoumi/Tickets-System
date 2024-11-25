@@ -17,10 +17,6 @@
         </div>
         <div class="md:text-md flex items-center justify-between p-4 w-full text-sm bg-white border-b md:px-12 md:py-0">
             <div>
-                <div>
-                    <button @click="incrementNotifications">Increment Notifications</button>
-                    <p>Current notifications: {{ $notificationsStore.count }}</p>
-                </div>
             </div>
             <div class="flex items-center gap-4">
                 <!-- <div @click="event">

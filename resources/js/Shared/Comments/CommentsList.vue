@@ -1,7 +1,7 @@
 <template>
     <div class="space-y-4 mt-4">
         <!-- Comment 1 -->
-        <div v-for="comment in comments.data" :key="comment.id" class="bg-white p-4 rounded-lg shadow">
+        <div v-for="comment in commentsStore.comments.data" :key="comment.id" class="bg-white p-4 rounded-lg shadow">
             <div class="flex items-center mb-2">
                 <div class="w-10 h-10 rounded-full mr-3 flex items-center justify-center bg-gray-200 uppercase">
                     {{ comment.user.username.charAt(0) }}
@@ -18,20 +18,27 @@
 
 <script>
 import { formatCommentDate } from "@/helpers/dateHelpers.js"
+import { commentsStore } from "@/store/comments/store";
 
 export default {
+    data() {
+        return {
+            commentsStore
+        }
+    },
     computed: {
         auth() {
             return this.$page.props.auth
         },
         comments() {
             return this.$page.props.comments
-        }
+        },
     },
     mounted() {
         console.log("mmmmoooounted", this.comments, this.auth)
+        commentsStore.setComments(this.comments)
     },
-    methods:{
+    methods: {
         formatCommentDate,
     }
 }
