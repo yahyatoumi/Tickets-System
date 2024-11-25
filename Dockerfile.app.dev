@@ -1,4 +1,4 @@
-# Set the base image for subsequent instructions
+# Set the base image
 FROM php:8.2-fpm
 
 # Install dependencies
@@ -15,8 +15,19 @@ RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
     libpng-dev \
-    libpq-dev && \
-    docker-php-ext-install pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd zip
+    libpq-dev \
+    supervisor && \
+    docker-php-ext-install \
+    pdo_mysql \
+    pdo_pgsql \
+    mbstring \
+    exif \
+    pcntl \
+    bcmath \
+    gd \
+    zip && \
+    pecl install redis && \
+    docker-php-ext-enable redis
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -30,18 +41,22 @@ WORKDIR /var/www
 # Remove default server definition
 RUN rm -rf /var/www/html
 
-# Copy existing application directory contents
+# Copy supervisor config
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Copy application source code and set permissions
 COPY . /var/www
+RUN chown -R www-data:www-data /var/www
 
-# Copy existing application directory permissions
-COPY --chown=www-data:www-data . /var/www
+# Create necessary directories and set permissions
+RUN mkdir -p /var/log/supervisor /var/run
+RUN chown -R www-data:www-data /var/log/supervisor /var/run
 
-# Change current user to www
-USER www-data
-
-RUN php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan view:cache
-
-# Expose port 9000 and start php-fpm server
+# Expose the PHP-FPM port
 EXPOSE 9000
+
+# Switch to root user for the CMD
+USER root
+
+# Set the CMD to run supervisor
+# CMD ["supervisord", "-n", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

@@ -1,0 +1,5 @@
+Illuminate\Support\Facades\Redis::connection()->ping();
+Illuminate\Support\Facades\Redis::connection("default")->ping();
+Illuminate\Support\Facades\Redis::connection("session")->ping();
+Illuminate\Support\Facades\Redis::connection("cache")->ping();
+Illuminate\Support\Facades\Redis::connection("queue")->ping();
