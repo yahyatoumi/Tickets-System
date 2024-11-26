@@ -1,66 +1,113 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Ticket System Manager  
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This repository hosts a **Ticket System Manager** built with **Laravel**, **Inertia.js**, and **Vue.js**. The application provides an efficient platform for managing tickets, with distinct roles and functionalities for **Admins**, **Supervisors**, and **End Users**.  
 
-## About Laravel
+## Key Features  
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+1. **Role-Based Ticket Management**  
+   - **End Users**: Can submit tickets describing issues or requests.  
+   - **Supervisors**: Handle assigned tickets, update progress, and resolve them. They can also perform all End User actions.  
+   - **Admins**: Assign tickets to Supervisors and oversee the process. They can also perform all Supervisor actions.  
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+2. **Real-Time Notifications**  
+   - Notifications are sent to Admins for every action or event related to a ticket, such as creation, updates, or comments.  
+   - Other users receive notifications for relevant ticket updates and comments.  
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+3. **Commenting System**  
+   - Users can add comments on tickets, ensuring clear communication between all parties.  
 
-## Learning Laravel
+4. **Status Updates**  
+   - Supervisors can update the ticket status (e.g., "Resolved" after the issue is fixed).  
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+5. **File Attachments**  
+   - Users can attach files to tickets for better issue description or context.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Application Roles  
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### **End Users**  
+- Submit tickets with details about issues or requests.  
+- Receive notifications for ticket updates and comments.  
 
-## Laravel Sponsors
+### **Supervisors**  
+- Handle tickets assigned to them by Admins.  
+- Update ticket statuses and leave comments.  
+- Perform all End User actions.  
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### **Admins**  
+- Assign submitted tickets to Supervisors.  
+- Monitor ticket progress and user activity.  
+- Perform all Supervisor actions.  
+- Receive notifications for **all events** related to tickets, ensuring complete oversight.  
 
-### Premium Partners
+## Technologies Used  
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+- **Laravel**: Back-end framework to manage business logic and API endpoints.  
+- **Inertia.js**: A bridge between Laravel and Vue.js for single-page application functionality.  
+- **Vue.js**: Front-end framework to create dynamic user interfaces.  
+- **PostgreSQL**: Database for storing application data. 
 
-## Contributing
+# For docker-env branch
+- **Redis**: For caching and managing real-time notifications.  
+- **Docker**: To containerize and manage the application in a consistent environment.  
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Installation  
 
-## Code of Conduct
+1. Clone the repository:  
+   ```bash
+   git clone https://github.com/your-username/ticket-system-manager.git
+   cd ticket-system-manager
+   ```  
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+2. Install dependencies:  
+   ```bash
+   composer install
+   npm install
+   ```  
 
-## Security Vulnerabilities
+3. Set up the `.env` file:  
+   - Copy `.env.example` to `.env`.  
+   - Update database and Redis configurations as needed.  
+   - **Ensure PostgreSQL is running and listening on the correct port, and the credentials in `.env` match the database setup.**  
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+4. Generate the application key:  
+   ```bash
+   php artisan key:generate
+   ```  
 
-## License
+5. Run migrations and seeders:  
+   ```bash
+   php artisan migrate --seed
+   ```  
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+6. Start the development server:  
+   ```bash
+   php artisan serve
+   npm run dev
+   ```  
+
+7. Start the Reverb server:  
+   ```bash
+   php artisan reverb:start
+   ```  
+
+8. Start the queue worker:  
+   ```bash
+   php artisan queue:work
+   ```  
+   - **Ensure your `.env` file is correctly configured with Redis settings to handle queued jobs efficiently.**  
+
+**Note:** Double-check that PostgreSQL is properly configured, listening, and connected.
+
+## Notifications and Real-Time Updates  
+
+- **Admins** receive notifications for **all events** on any ticket, ensuring they are always informed.  
+- **End Users** and **Supervisors** receive notifications for ticket updates and comments relevant to them.  
+- The app uses **Reverb** and **Laravel Echo** for broadcasting real-time notifications.  
+
+## Development Notes  
+
+1. **Role Management**  
+   Roles are managed in the database. Ensure users are assigned the correct roles (Admin, Supervisor, End User).  
+
+2. **Ticket Comments**  
+   Comments are displayed in real-time for better collaboration. 
