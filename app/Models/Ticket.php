@@ -7,6 +7,7 @@ use App\Events\TicketUpdateEvent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Queue;
 
 class Ticket extends Model
 {
@@ -53,12 +54,16 @@ class Ticket extends Model
 
         // Fire the event for each admin
         foreach ($admins as $admin) {
-            event(new TicketCreatedEvent($this, $admin));
+            // Queue::push(new TicketCreatedEvent($this, $admin));
+            // event(new TicketCreatedEvent($this, $admin));
+            TicketCreatedEvent::dispatch($this, $admin);
         }
 
         // Fire the event for the submitter
         if ($this->submitter) {
-            event(new TicketCreatedEvent($this, $this->submitter));
+            TicketCreatedEvent::dispatch($this, $this->submitter);
+            // Queue::push(new TicketCreatedEvent($this, $this->submitter));
+            // event(new TicketCreatedEvent($this, $this->submitter));
         }
     }
 

@@ -141,7 +141,6 @@ return [
     |
     */
 
-    //the redis driver
     'redis' => [
         //the redis client (requires installing the phpredis.so extension using pecl)
         'client' => 'phpredis',
@@ -195,6 +194,5 @@ return [
             'prefix' => 'q:',
         ],
     ],
-
 
 ];

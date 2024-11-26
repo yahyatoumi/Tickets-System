@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Log;
 
 class SendTicketCreatedNotification implements ShouldQueue
 {
+    use InteractsWithQueue;
+    
     /**
      * Create the event listener.
      */

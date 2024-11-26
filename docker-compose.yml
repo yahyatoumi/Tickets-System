@@ -23,9 +23,9 @@ services:
       - redis
       - db
     # For Dev
-    command: sh -c "php artisan optimize:clear && php artisan migrate && supervisord -n -c /etc/supervisor/conf.d/supervisord.conf" 
+    # command: sh -c "php artisan optimize:clear && php artisan migrate && supervisord -n -c /etc/supervisor/conf.d/supervisord.conf" 
     ## For Prod
-    # command: sh -c "php artisan optimize:clear && php artisan migrate && php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan optimize && php-fpm"
+    command: sh -c "php artisan optimize:clear && php artisan migrate && php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan optimize && supervisord -n -c /etc/supervisor/conf.d/supervisord.conf"
 
 
   nginx:
@@ -105,27 +105,6 @@ services:
     ports:
       - "6379:6379"
 
-  # queue-worker:
-  #   build:
-  #     context: .
-  #   volumes:
-  #     - .:/var/www
-  #   depends_on:
-  #     - redis
-  #   command: php artisan queue:work redis
-
-  # supervisor:
-  #   build:
-  #     context: .
-  #     dockerfile: supervisord.Dockerfile
-  #   container_name: w3c-supervisor
-  #   ports:
-  #      - "8080:8080"
-  #   volumes:
-  #     - ./src:/var/www/html
-  #     - .docker/supervisord/supervisord.conf:/etc/supervisor/supervisord.conf
-  #   networks:
-  #     - app-network
 
 networks:
   app-network:

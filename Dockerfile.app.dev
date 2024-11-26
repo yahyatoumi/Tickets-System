@@ -53,7 +53,7 @@ RUN mkdir -p /var/log/supervisor /var/run
 RUN chown -R www-data:www-data /var/log/supervisor /var/run
 
 # Expose the PHP-FPM port
-EXPOSE 9000
+EXPOSE 9000 8080
 
 # Switch to root user for the CMD
 USER root
