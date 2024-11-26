@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('QUEUE_CONNECTION', 'database'),
+    'default' => env('QUEUE_CONNECTION', 'job'),
 
     /*
     |--------------------------------------------------------------------------
@@ -72,7 +72,6 @@ return [
             'after_commit' => false,
         ],
 
-        //this is the 'job' queue connection
         'job' => [
             //uses the redis driver from config/database.php
             'driver' => 'redis',
@@ -94,7 +93,6 @@ return [
             'retry_after' => 90,
             'block_for' => null,
         ],
-
     ],
 
     /*

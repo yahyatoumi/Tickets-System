@@ -10,7 +10,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use InvalidArgumentException;
 
-class TicketUpdateNotification extends Notification
+class TicketUpdateNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 

@@ -11,7 +11,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Log;
 
-class NewCommentNotification extends Notification
+class NewCommentNotification extends Notification  implements ShouldQueue
 {
     use Queueable;
 
