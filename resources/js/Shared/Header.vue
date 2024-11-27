@@ -9,7 +9,7 @@
                     </svg>
                 </template>
                 <template #dropdown>
-                    <div class="mt-2 px-8 py-4 bg-indigo-800 rounded shadow-lg">
+                    <div class="mt-2 px-8 py-4 bg-indigo-900 rounded shadow-lg">
                         <side-bar-nav />
                     </div>
                 </template>

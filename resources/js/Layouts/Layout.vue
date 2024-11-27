@@ -4,7 +4,7 @@
     <div class="md:flex md:flex-col md:h-screen">
       <Header />
       <div class="md:flex md:grow md:overflow-hidden">
-        <SideBarNav class="hidden shrink-0 p-12 w-56 bg-indigo-800 overflow-y-auto md:block" />
+        <SideBarNav class="hidden shrink-0 p-12 w-56 bg-indigo-900 overflow-y-auto md:block" />
         <main class="px-4 py-8 md:flex-1 md:p-12 md:overflow-y-auto">
 
           <!-- This is where toast will be inserted -->

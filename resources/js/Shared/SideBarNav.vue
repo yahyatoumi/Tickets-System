@@ -32,11 +32,6 @@
       <v-icon name="io-ticket" class="fill-gray-400 group-hover:fill-white" />
       </Link>
     </div>
-    <div class="mb-4">
-      <Link class="group flex items-center py-3" href="/reports">
-      <div :class="isUrl('reports') ? 'text-white' : 'text-indigo-300 group-hover:text-white'">Reports</div>
-      </Link>
-    </div>
   </div>
 </template>
 
