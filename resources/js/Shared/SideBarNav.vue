@@ -15,7 +15,7 @@
         </div>
         <v-icon name="md-notifications-sharp" class="text-gray-400" />
       </div>
-      <div :class="isUrl('/notifications') ? 'text-white' : 'text-indigo-300 group-hover:text-white'">
+      <div :class="isUrl('notifications') ? 'text-white' : 'text-indigo-300 group-hover:text-white'">
         Notifications
       </div>
       </Link>
@@ -23,14 +23,14 @@
     <div class="mb-4">
       <Link :only="['tickets']" class="group flex items-center gap-2 py-3" href="/tickets/fromyou">
       <v-icon name="io-ticket" class="fill-gray-400 group-hover:fill-white" />
-      <div :class="isUrl('/tickets/fromyou') ? 'text-white' : 'text-indigo-300 group-hover:text-white'">{{
+      <div :class="isUrl('tickets/fromyou') ? 'text-white' : 'text-indigo-300 group-hover:text-white'">{{
         !isEndUser(auth) ? "From you" : "Tickets" }}</div>
       </Link>
     </div>
     <div :only="['tickets']" v-if="!isEndUser(auth)" class="mb-4">
       <Link class="group flex items-center gap-2 py-3" href="/tickets/toyou">
       <v-icon name="io-ticket" class="fill-gray-400 group-hover:fill-white" />
-      <div :class="isUrl('/tickets/toyou') ? 'text-white' : 'text-indigo-300 group-hover:text-white'">To you</div>
+      <div :class="isUrl('tickets/toyou') ? 'text-white' : 'text-indigo-300 group-hover:text-white'">To you</div>
       </Link>
     </div>
   </div>
