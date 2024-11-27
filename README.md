@@ -52,45 +52,39 @@ This repository hosts a **Ticket System Manager** built with **Laravel**, **Iner
 
 ## Installation  
 
-1. Clone the repository:  
-   ```bash
-   git clone https://github.com/your-username/ticket-system-manager.git
-   cd ticket-system-manager
-   ```  
-
-2. Install dependencies:  
+1. Install dependencies:  
    ```bash
    composer install
    npm install
    ```  
 
-3. Set up the `.env` file:  
+2. Set up the `.env` file:  
    - Copy `.env.example` to `.env`.  
    - Update database and Redis configurations as needed.  
    - **Ensure PostgreSQL is running and listening on the correct port, and the credentials in `.env` match the database setup.**  
 
-4. Generate the application key:  
+3. Generate the application key:  
    ```bash
    php artisan key:generate
    ```  
 
-5. Run migrations and seeders:  
+4. Run migrations and seeders:  
    ```bash
    php artisan migrate --seed
    ```  
 
-6. Start the development server:  
+5. Start the development server:  
    ```bash
    php artisan serve
    npm run dev
    ```  
 
-7. Start the Reverb server:  
+6. Start the Reverb server:  
    ```bash
    php artisan reverb:start
    ```  
 
-8. Start the queue worker:  
+7. Start the queue worker:  
    ```bash
    php artisan queue:work
    ```  
