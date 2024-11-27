@@ -18,7 +18,7 @@ export const notificationsStore = reactive({
       ...notifications,
       data: plainData,
     };
-    this.updateCount(plainData.length);
+    // this.updateCount(plainData.length);
   },
   addNotification(notification) {
     const newNotif = {

@@ -4,7 +4,7 @@ import { Ziggy } from './ziggy'; // Adjust path if necessary
 import { route } from 'ziggy-js';
 import { addIcons } from 'oh-vue-icons';
 import { OhVueIcon } from 'oh-vue-icons';
-import { MdExpandmore, FcMenu, IoTicket, BiChatFill, MdNotificationsSharp, FaCommentAlt  } from 'oh-vue-icons/icons';
+import { MdExpandmore, FcMenu, IoTicket, BiChatFill, MdNotificationsSharp, FaCommentAlt, MdSpacedashboardRound } from 'oh-vue-icons/icons';
 import Cookies from 'js-cookie';
 import { notificationsStore } from '@/store/notifications/store.js'
 
@@ -13,7 +13,7 @@ import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 window.Pusher = Pusher;
 
-addIcons(MdExpandmore, FcMenu, IoTicket, BiChatFill, MdNotificationsSharp, FaCommentAlt );
+addIcons(MdExpandmore, FcMenu, IoTicket, BiChatFill, MdNotificationsSharp, FaCommentAlt, MdSpacedashboardRound );
 
 createInertiaApp({
   resolve: name => {
