@@ -52,7 +52,12 @@ This repository hosts a **Ticket System Manager** built with **Laravel**, **Iner
 
 ## Run Docker env  
 
-2. Running containers:  
+2. Build containers:  
+   ```bash
+   docker-compose build
+   ``` 
+
+2. Run containers:  
    ```bash
    docker-compose up
    ``` 
