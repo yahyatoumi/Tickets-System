@@ -59,8 +59,6 @@ services:
       - app-network
     # For Dev
     command: sh -c "npm run dev"
-    ## For Prod
-    # command: sh -c "npm run build && npm run serve"
     
 
   db:
