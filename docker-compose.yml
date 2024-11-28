@@ -24,7 +24,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
     ports:
-      - "5050:80" # pgAdmin UI will be accessible on port 5050
+      - "5050:80" # pgAdmin will be accessible on port 5050
     volumes:
       - pgadmin_data:/var/lib/pgadmin
     networks:
