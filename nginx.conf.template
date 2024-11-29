@@ -1,0 +1,26 @@
+server{
+
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name ${SERVER_NAME};
+    ssl_certificate /etc/ssl/certs/ss.crt;
+    ssl_certificate_key /etc/ssl/private/ss.key;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    access_log off;
+    location /apiback/ {
+        proxy_pass http://django:8000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+    location /static/ {
+        proxy_pass http://django:8000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
