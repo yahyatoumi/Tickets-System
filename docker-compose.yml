@@ -13,8 +13,10 @@ services:
       - ./:/var/www
       - ./.env:/var/www/.env
     environment:
-      - APP_ENV=local
-      - DB_HOST=my-postgres
+      APP_ENV: ${APP_ENV}
+      NODE_ENV: ${APP_ENV}
+      APP_DEBUG: ${APP_DEBUG}
+      DB_HOST: my-postgres
     networks:
       - app-network
     depends_on:
@@ -23,7 +25,11 @@ services:
     # For Dev
     # command: sh -c "php artisan optimize:clear && supervisord -n -c /etc/supervisor/conf.d/supervisord.conf" 
     ## For Prod
-    command: sh -c " supervisord -n -c /etc/supervisor/conf.d/supervisord.conf"
+    command: sh -c "php artisan config:clear && supervisord -n -c /etc/supervisor/conf.d/supervisord.conf"
+        # php artisan optimize:clear && 
+        # php artisan view:clear && 
+        # php artisan route:clear && 
+        # php artisan config:cache && 
 
 
   nginx:
@@ -49,7 +55,7 @@ services:
     container_name: my-laravel-node
     ports:
       - "3000:3000"
-    restart: unless-stopped
+    # restart: unless-stopped
     working_dir: /var/www
     volumes:
       - ./:/var/www

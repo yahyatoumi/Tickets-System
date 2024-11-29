@@ -1,3 +1,5 @@
+import '../css/app.css';
+
 import { createApp, h } from 'vue'
 import { createInertiaApp, Link, Head } from '@inertiajs/vue3'
 import { Ziggy } from './ziggy'; // Adjust path if necessary

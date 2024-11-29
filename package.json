@@ -3,6 +3,7 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
+        "production": "vite production --port 3000",
         "dev": "vite",
         "serve": "vite preview --port 3000"
     },
