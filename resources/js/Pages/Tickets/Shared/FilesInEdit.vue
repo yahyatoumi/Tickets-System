@@ -23,7 +23,6 @@
 
 <script>
 import { Head, Link } from '@inertiajs/vue3'
-const filesSeverUrl = import.meta.env.VITE_FILES_API_URL;
 
 export default {
     components: {
@@ -32,7 +31,7 @@ export default {
     },
     data() {
         return {
-            filesSeverUrl: import.meta.env.VITE_FILES_API_URL
+            filesSeverUrl: "/storage/"
         }
     },
     computed: {
@@ -42,7 +41,6 @@ export default {
         },
     },
     mounted() {
-        console.log(filesSeverUrl);
         console.log("tiket", this.$page.props.ticket)
     }
 
