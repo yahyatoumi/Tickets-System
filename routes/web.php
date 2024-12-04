@@ -44,6 +44,11 @@ Route::middleware([JWTMiddleware::class])->group(function () {
 		Route::post('/tickets/toyou/edit', [TicketController::class, 'edit'])->name('tickets.toyou.edit');
 	});
 
+	Route::post('/test', [BroadcastingController::class, 'test']);
+	Route::post('/mybroadcasting/auth', [BroadcastingController::class, 'authorize']);
+
+
+
 	// All users
 	Route::get(
 		'/',

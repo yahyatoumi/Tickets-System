@@ -33,7 +33,7 @@ createInertiaApp({
       wssPort: import.meta.env.VITE_REVERB_PORT,
       forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
       enabledTransports: ['ws', 'wss'],
-      authEndpoint: '/api/mybroadcasting/auth', // Correct key for overriding the auth endpoint
+      authEndpoint: '/mybroadcasting/auth', // Correct key for overriding the auth endpoint
       auth: {
         headers: {
           withCredentials: true,

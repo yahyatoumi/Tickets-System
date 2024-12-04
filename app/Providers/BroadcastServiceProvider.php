@@ -22,12 +22,15 @@ class BroadcastServiceProvider extends ServiceProvider
     {
         // Broadcast::routes();
         // Broadcast::routes(['middleware' => ['auth:api']]);
+        // Broadcast::routes([
+        //     'middleware' => ['web', \App\Http\Middleware\JWTMiddleware::class]
+        // ]);
 
-        // Define a private channel, for example, for a user with a specific ID
-        Broadcast::channel('channel_for_user.{userId}', function ($user, $userId) {
-            // Check if the authenticated user is authorized to listen to this channel
-            return (int) $user->id === (int) $userId;
-        });
+        // // Define a private channel, for example, for a user with a specific ID
+        // Broadcast::channel('channel_for_user.{userId}', function ($user, $userId) {
+        //     // Check if the authenticated user is authorized to listen to this channel
+        //     return (int) $user->id === (int) $userId;
+        // });
         //
     }
 }

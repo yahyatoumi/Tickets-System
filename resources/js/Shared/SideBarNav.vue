@@ -40,6 +40,7 @@
 import { Link } from '@inertiajs/vue3'
 import { isEndUser } from '@/helpers/rolesHelpers';
 import { commentsStore } from '@/store/comments/store';
+import axios from "axios"
 
 
 
@@ -63,7 +64,7 @@ export default {
     isEndUser,
   },
   created() {
-    window.Echo.channel(`channel_for_everyone.${this.auth.user.id}`)
+    window.Echo.private(`channel_for_everyone.${this.auth.user.id}`)
       .listen(".ticket.created", (response) => {
         // messages.value.push(response.message);
         console.log("event catcheddd");
