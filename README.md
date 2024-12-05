@@ -1,6 +1,14 @@
 # Ticket System Manager  
 
-This repository hosts a **Ticket System Manager** built with **Laravel**, **Inertia.js**, and **Vue.js**. The application provides an efficient platform for managing tickets, with distinct roles and functionalities for **Admins**, **Supervisors**, and **End Users**.  
+This repository hosts a **Ticket System Manager** built with **Laravel**, **Inertia.js**, and **Vue.js**. The application provides a robust platform for managing tickets, with specific roles and functionalities for **Admins**, **Supervisors**, and **End Users**.
+
+The old version of this application is currently running on AWS services and can be accessed at:
+
+- URL: [http://13.61.7.49/](http://13.61.7.49/)  
+- **Username**: `admin`  
+- **Password**: `admin`  
+
+Note that this is an **old version** of the system, so there may be some bugs that have already been fixed in the current version. If time permits, I may deploy the updated version soon.
 
 ## Key Features  
 
