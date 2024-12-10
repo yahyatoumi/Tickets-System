@@ -4,7 +4,7 @@ This repository hosts a **Ticket System Manager** built with **Laravel**, **Iner
 
 The old version of this application is currently running on AWS services and can be accessed at:
 
-- URL: [http://16.171.22.35/](http://16.171.22.35/)  
+- URL: [https://16.171.22.35/](https://16.171.22.35/)  
 - **Username**: `admin`  
 - **Password**: `admin`  
 
