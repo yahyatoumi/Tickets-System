@@ -85,3 +85,6 @@ Note that this is an **old version** of the system, so there may be some bugs th
 
 2. **Ticket Comments**  
    Comments are displayed in real-time for better collaboration. 
+
+**Schema**  
+   ![Image Alt Text](./examples/schema.png)
